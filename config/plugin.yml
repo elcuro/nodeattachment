@@ -1,0 +1,9 @@
+name: Node attachments
+description: Associate attachmets to selected nodes
+
+author: Juraj Jancuska
+authorEmail: jjancuska@gmail.com
+authorUrl: 
+
+dependencies:
+  plugins:
