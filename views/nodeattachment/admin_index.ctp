@@ -1,5 +1,14 @@
 <div class="attachments form">
-        <h2><?php echo $title_for_layout; ?></h2>
+        <h2>
+                <?php __('Attachments for') ?>&nbsp;
+                <?php
+                echo $html->link($node['Node']['title'], array(
+                    'plugin' => false,
+                    'controller' => 'nodes',
+                    'action' => 'edit',
+                    $node['Node']['id'])
+                );?>
+        </h2>
         <?php
                 $formUrl = array('plugin' => false, 'controller' => 'attachments', 'action' => 'add');
                 if (isset($this->params['named']['editor'])) {
@@ -29,7 +38,7 @@
         echo $tableHeaders;
 
         $rows = array();
-        foreach ($Node['Attachments'] AS $attachment) {
+        foreach ($node['Attachments'] AS $attachment) {
             $actions  = $html->link(__('Edit', true), array(
                 'controller' => 'nodeattachment',
                 'action' => 'edit',

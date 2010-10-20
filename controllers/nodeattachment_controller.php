@@ -49,7 +49,7 @@ class NodeattachmentController extends NodeattachmentAppController {
 
                 $this->Node->recursive = 0;
                 $node = $this->Node->read(null, $id);
-                $this->set('Node', $node);
+                $this->set('node', $node);
 
         }
 
