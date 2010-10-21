@@ -15,8 +15,11 @@ class NodeattachmentsSchema extends CakeSchema {
          * @var array
          */
         public $nodeattachments = array(
-            'id' => array('type' => 'integer', 'null' => false, 'lenght' => 11, 'key' => 'primary'),
-            'parent_id' => array('type' => 'integer', 'null' => false, 'lenght' => 11),
+            'id' => array('type' => 'integer', 'null' => false, 'lenght' => 8, 'key' => 'primary'),
+            'parent_node_id' => array('type' => 'integer', 'null' => false, 'lenght' => 8),
+            'parent_id' => array('type' => 'integer', 'null' => true, 'lenght' => 8, 'default' => null),
+            'lft' => array('type' => 'integer', 'null' => true, 'length' => 8, 'default' => null),
+            'rght' => array('type' => 'integer', 'null' => true, 'length' => 8, 'default' => null),
             'tableParameters' => array('charset' => 'utf8', 'engine' => 'MyISAM')
         );
 

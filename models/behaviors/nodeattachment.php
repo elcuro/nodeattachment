@@ -41,12 +41,13 @@ class NodeattachmentBehavior extends ModelBehavior {
                parent::afterSave($model, $created);
 
                if ($created && isset($model->data['Nodeattachment']) && ($model->type == 'attachment')) {
-                       $Nodeattachment = ClassRegistry::init('Nodeattachment.Nodeattachment');
+                       $Nodeattachment = ClassRegistry::init('Nodeattachment.Nodeattachment');                       
                        $Nodeattachment->create();
                        $Nodeattachment->save(array(
                            'id' => $model->id,
-                           'parent_id' => $model->data['Nodeattachment']['parent_id']
+                           'parent_node_id' => $model->data['Nodeattachment']['parent_node_id']
                        ));
+                       $Nodeattachment->recover();
                }
         }
 
@@ -86,7 +87,7 @@ class NodeattachmentBehavior extends ModelBehavior {
          * @param integer $nodeid
          * @return array
          */
-        private function _getAttachments(&$model, $nodeId) {
+        private function _getAttachments(&$model, $node_id) {
 
                 $data = array();
                 $cond = array();
@@ -95,19 +96,29 @@ class NodeattachmentBehavior extends ModelBehavior {
                         $this->Nodeattachment = ClassRegistry::init('Nodeattachment.Nodeattachment');
                 }
 
-                $attachments = $this->Nodeattachment->findAllByParent_id($nodeId);
-                foreach($attachments as $attachment) {
-                        $cond[] = array($model->alias.'.id' => $attachment['Nodeattachment']['id']);
-                }
-                if (count($cond) > 0) {
-                        $runtimeType = $model->type;
-                        $model->recursive = 0;
-                        $model->type = 'attachment';
-                        $data = $model->find('all', array('conditions' => array('or' => $cond), 'order' => $model->alias.'.updated DESC'));
-                        $model->type = $runtimeType;
-                }
+                // bind Node model
+                $this->Nodeattachment->bindModel(array(
+                    'hasOne' => array(
+                        'Node' => array(
+                            'className' => 'Node',
+                            'foreignKey' => 'id'
+                        )
+                    )
+                ));
+                // unbind unnecessary models from Node model
+                $this->Nodeattachment->Node->unbindModel(array(
+                    'belongsTo' => array('User'),
+                    'hasMany' => array('Comment', 'Meta'),
+                    'hasAndBelongsToMany' => array('Taxanomy')
+                ));
                 
-                return $data;
+                $this->Nodeattachment->Node->recursive = 0;
+                $attachments = $this->Nodeattachment->find('all', array(
+                    'conditions' => array('Nodeattachment.parent_node_id' => $node_id),
+                    'order' => 'Nodeattachment.lft ASC'
+                ));
+                
+                return $attachments;
 
         }
 

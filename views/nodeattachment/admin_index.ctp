@@ -19,7 +19,7 @@
                 <fieldset>
                 <?php
                     echo $form->input('Node.file', array('label' => __('Upload', true), 'type' => 'file',));
-                    echo $form->hidden('Nodeattachment.parent_id');
+                    echo $form->hidden('Nodeattachment.parent_node_id');
                 ?>
                 </fieldset>
         <?php echo $form->end('Submit');?>
@@ -43,6 +43,16 @@
                 'controller' => 'nodeattachment',
                 'action' => 'edit',
                 $attachment['Node']['id'],
+            ));
+            $actions  .= $html->link(__('Move Down', true), array(
+                'controller' => 'nodeattachment',
+                'action' => 'movedown',
+                $attachment['Nodeattachment']['id'],
+            ));
+            $actions  .= $html->link(__('Move Up', true), array(
+                'controller' => 'nodeattachment',
+                'action' => 'moveup',
+                $attachment['Nodeattachment']['id'],
             ));
             $actions .= ' ' . $layout->adminRowActions($attachment['Node']['id']);
             $actions .= ' ' . $html->link(__('Delete', true), array(

@@ -54,7 +54,7 @@ class NodeattachmentComponent extends Object {
                             'plugin' => 'nodeattachment',
                             'controller' => 'nodeattachment',
                             'action' => 'index',
-                            $controller->data['Nodeattachment']['parent_id']
+                            $controller->data['Nodeattachment']['parent_node_id']
                         );
                 }
         }
