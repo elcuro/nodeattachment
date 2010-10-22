@@ -82,7 +82,7 @@ class NodeattachmentController extends NodeattachmentAppController {
                 }
 
                 $this->Nodeattachment->id = $id;
-                //$this->Nodeattachment->recover();
+                $this->Nodeattachment->Behaviors->attach('Tree');
                 $this->Nodeattachment->moveUp($this->Nodeattachment->id, $step);
 
                 $this->redirect($this->referer());
@@ -104,7 +104,6 @@ class NodeattachmentController extends NodeattachmentAppController {
                 }
 
                 $this->Nodeattachment->id = $id;
-                //$this->Nodeattachment->recover();
                 $this->Nodeattachment->moveDown($this->Nodeattachment->id, $step);
 
                 $this->redirect($this->referer());

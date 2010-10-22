@@ -32,6 +32,8 @@ class NodeattachmentBehavior extends ModelBehavior {
 
         /**
          * After save callback
+         * Saving attachment id to nodeattachment table as node_id,
+         * with parent_node_id = id of parent node (page, block, etc)
          *
          * @param object $model
          * @param boolean $created
@@ -41,13 +43,25 @@ class NodeattachmentBehavior extends ModelBehavior {
                parent::afterSave($model, $created);
 
                if ($created && isset($model->data['Nodeattachment']) && ($model->type == 'attachment')) {
-                       $Nodeattachment = ClassRegistry::init('Nodeattachment.Nodeattachment');                       
+                       $Nodeattachment = &ClassRegistry::init('Nodeattachment.Nodeattachment');
+
+                       // Check for Nodeattachment with node_id of current parent_node_id
+                       // required by Tree behavior
+                       if (!$ParentNode = $Nodeattachment->findByNode_id($model->data['Nodeattachment']['parent_node_id'])) {
+                               $Nodeattachment->create();
+                               $ParentNode = $Nodeattachment->save(array(
+                                        'node_id' => $model->data['Nodeattachment']['parent_node_id'],
+                                        'parent_id' => null
+                               ));
+                               $ParentNode['Nodeattachment']['id'] = $Nodeattachment->id;
+                       }
+                       // Save current node attachment
                        $Nodeattachment->create();
-                       $Nodeattachment->save(array(
-                           'id' => $model->id,
+                       $res1 = $Nodeattachment->save(array(
+                           'parent_id' => $ParentNode['Nodeattachment']['id'],
+                           'node_id' => $model->id,
                            'parent_node_id' => $model->data['Nodeattachment']['parent_node_id']
                        ));
-                       $Nodeattachment->recover();
                }
         }
 
@@ -89,19 +103,16 @@ class NodeattachmentBehavior extends ModelBehavior {
          */
         private function _getAttachments(&$model, $node_id) {
 
-                $data = array();
-                $cond = array();
-
                 if (!is_object($this->Nodeattachmet)) {
                         $this->Nodeattachment = ClassRegistry::init('Nodeattachment.Nodeattachment');
                 }
 
                 // bind Node model
                 $this->Nodeattachment->bindModel(array(
-                    'hasOne' => array(
+                    'belongsTo' => array(
                         'Node' => array(
                             'className' => 'Node',
-                            'foreignKey' => 'id'
+                            'foreignKey' => 'node_id'
                         )
                     )
                 ));
@@ -130,18 +141,17 @@ class NodeattachmentBehavior extends ModelBehavior {
          */
         public function  beforeDelete(&$model) {
                 parent::beforeDelete($model);
-                
+
+                $node_id = $model->id;
+
                 $Nodeattachment = ClassRegistry::init('Nodeattachment.Nodeattachment');
 
                 if ($model->type == 'attachment') {
                         // delete attachment by id
-                        $Nodeattachment->delete($model->id);
+                        $Nodeattachment->deleteAll(array('Nodeattachment.node_id' => $node_id));
                 } else {
                         // delete by parent_id
-                        $results = $Nodeattachment->findByParent_id($model->id);
-                        foreach ($results as $result) {
-                                $Nodeattachment->delete ($result['Nodeattachment']['id']);
-                        }
+                        $Nodeattachment->deleteAll(array('Nodeattachment.parent_node_id' => $node_id));
                 }
         }
 

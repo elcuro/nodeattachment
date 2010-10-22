@@ -10,13 +10,61 @@
 class NodeattachmentActivation {
 
         /**
+         * Schema directory
+         *
+         * @var string
+         */
+        private $SchemaDir;
+
+        /**
+         * DB connection
+         *
+         * @var object
+         */
+        private $db;
+
+        /**
+         * Constructor
+         *
+         * @return vodi
+         */
+         public function  __construct() {
+
+                 $this->SchemaDir = APP.'plugins'.DS.'nodeattachment'.DS.'config'.DS.'schemas';
+                 $this->db =& ConnectionManager::getDataSource('default');
+
+        }
+
+        /**
          * Before onActivation
          *
          * @param object $controller
          * @return boolean
          */
         public function beforeActivation(&$controller) {
-                if (!$this->_createTablesFromSchemas($controller)) return false;
+
+                App::Import('CakeSchema');
+                $CakeSchema = new CakeSchema();
+
+                // list schema files from config/schema dir
+                if (!$cake_schema_files = $this->_listSchemas($this->SchemaDir))
+                        return false;
+
+                // create table for each schema
+                foreach ($cake_schema_files as $schema_file) {
+                        $schema_name = substr($schema_file, 0, -4);
+                        $schema_class_name = Inflector::camelize($schema_name).'Schema';
+                        $table_name = $schema_name;
+
+                        if (!in_array($table_name, $this->db->_sources)) {
+                                 include_once($this->SchemaDir.DS.$schema_file);
+                                 $ActiveSchema = new $schema_class_name;
+                                 if(!$this->db->execute($this->db->createSchema($ActiveSchema, $table_name))) {
+                                         return false;
+                                 }
+                        }
+
+                }
 
                 return true;
 
@@ -30,9 +78,7 @@ class NodeattachmentActivation {
          * @return void
          */
         public function onActivation(&$controller) {
-                $controller->Croogo->addAco('Nodeattachment');
-                $controller->Croogo->addAco('Nodeattachment/admin_index');
-                $controller->Croogo->addAco('Nodeattachment/admin_edit');
+
         }
 
         /**
@@ -42,9 +88,21 @@ class NodeattachmentActivation {
          * @return boolean
          */
         public function beforeDeactivation(&$controller) {
-                $db =& ConnectionManager::getDataSource('default');
-                if (!$db->execute('DROP TABLE nodeattachments')) return false;
+
+                // list schema files from config/schema dir
+                if (!$cake_schema_files = $this->_listSchemas($this->SchemaDir))
+                        return false;
+
+                // delete tables for each schema
+                foreach ($cake_schema_files as $schema_file) {
+                        $schema_name = substr($schema_file, 0, -4);
+                        $table_name = $schema_name;
+                        if(!$this->db->execute('DROP TABLE '.$table_name)) {
+                                return false;
+                        }
+                }
                 return true;
+
         }
 
         /**
@@ -55,25 +113,20 @@ class NodeattachmentActivation {
          * @return void
          */
         public function onDeactivation(&$controller) {
-                $controller->Croogo->removeAco('Nodeattachment');
+
         }
 
         /**
-         * Create table from schemas in
-         * plugin/config/schema folder
+         * List schemas
          *
-         * @param object $controller
          * @return array
          */
-        private function _createTablesFromSchemas(&$controller) {
+        private function _listSchemas($dir = false) {
 
-                App::Import('CakeSchema');
-                $CakeSchema = new CakeSchema();
-                $db =& ConnectionManager::getDataSource('default');
+                if (!$dir) return false;
+
                 $cake_schema_files = array();
-
-                // list schema files from config/schema dir
-                if ($h = opendir(APP.'plugins'.DS.'nodeattachment'.DS.'config'.DS.'schemas')) {
+                if ($h = opendir($dir)) {
                         while (false !== ($file = readdir($h))) {
                                 if (($file != ".") && ($file != "..")) {
                                         $cake_schema_files[] = $file;
@@ -82,25 +135,9 @@ class NodeattachmentActivation {
                 } else {
                         return false;
                 }
-                
-                // create table for each schema
-                foreach ($cake_schema_files as $schema_file) {
-                        $schema_name = substr($schema_file, 0, -4);
-                        $schema_class_name = Inflector::camelize($schema_name);
-                        $table_name = array_shift(explode('_', $schema_name));
 
-                        if (!in_array($table_name, $db->_sources)) {
-                                 include_once(APP.'plugins'.DS.'nodeattachment'.DS.'config'.DS.'schemas'.DS.$schema_file);
-                                 $ActiveSchema = new $schema_class_name;
-                                 if(!$db->execute($db->createSchema($ActiveSchema, $table_name))) {
-                                         return false;
-                                 }
-                        }
+                return $cake_schema_files;
 
-                }
-
-                return true;
-                
         }
 }
 ?>

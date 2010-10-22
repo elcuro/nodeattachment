@@ -21,7 +21,7 @@ class Nodeattachment extends NodeattachmentAppModel {
          * @var array
          */
         public $actsAs = array(
-            'Tree'
+           'Tree'
         );
 
 }
