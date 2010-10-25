@@ -40,16 +40,19 @@
         $rows = array();
         foreach ($node['Attachments'] AS $attachment) {
             $actions  = $html->link(__('Edit', true), array(
+                'plugin' => 'nodeattachment',
                 'controller' => 'nodeattachment',
                 'action' => 'edit',
                 $attachment['Node']['id'],
             ));
             $actions  .= $html->link(__('Move Down', true), array(
+                'plugin' => 'nodeattachment',
                 'controller' => 'nodeattachment',
                 'action' => 'movedown',
                 $attachment['Nodeattachment']['id'],
             ));
             $actions  .= $html->link(__('Move Up', true), array(
+                'plugin' => 'nodeattachment',
                 'controller' => 'nodeattachment',
                 'action' => 'moveup',
                 $attachment['Nodeattachment']['id'],
