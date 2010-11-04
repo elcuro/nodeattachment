@@ -62,7 +62,7 @@ class NodeattachmentController extends NodeattachmentAppController {
         public function admin_edit($id) {
                 $this->set('title_for_layout', __('Edit attachment', true));
                 $Node = $this->Node->read(null, $id);
-                $Nodeattachment = $this->Nodeattachment->read(null, $id);
+                $Nodeattachment = $this->Nodeattachment->findByNode_id($id);
                 $ParentNode['ParentNode'] = $this->Node->read(null, $Nodeattachment['Nodeattachment']['parent_node_id']);
                 $this->data = array_merge($Node, $ParentNode);
         }
