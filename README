@@ -1,7 +1,10 @@
 Croogo Nodeattachment  plugin
 ------------------------------
-Plugin for binding Croogo attachments to nodes of all
-types, except type 'attachment'
+Attach various types of files to node,
+AJAX multiple file upload
+
+!!! Not compatible with previos version of this plugin (0.1)
+To view previous version switch tag to 0.1
 
 
 How to use
@@ -11,10 +14,3 @@ How to use
 - Upload the zip file (available here)
 - Click on tick/cross icon of 'Nodeattachment' for activating or deactivating the plugin
 
-Notes
-------------------------------
-- all attachments deleted with this plugin are not deleted
-from Croogo nodes table, but only from plugin intrnal assocciation table
-- attachments added with this plugin will be added to croogo nodes table
-(with type 'attachment') also
-- for correct displaying of thumbs, Croogo heleper Image required

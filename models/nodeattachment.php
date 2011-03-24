@@ -15,14 +15,5 @@ class Nodeattachment extends NodeattachmentAppModel {
         */
 	public $name = 'Nodeattachment';
 
-        /**
-         * Behaviors
-         *
-         * @var array
-         */
-        public $actsAs = array(
-           'Tree'
-        );
-
 }
 ?>

@@ -9,151 +9,26 @@
 class NodeattachmentBehavior extends ModelBehavior {
 
         /**
-         * Nodeattachment model
-         *
-         * @var object
-         */
-        private $Nodeattachmet = null;
-
-        /**
-         * Setup
+         * Before find callback,
+         * bind Nodeattachment with hasMany relation
          *
          * @param object $model
-         * @param array  $config
-         * @return void
+         * @param array $query
+         * @return array $query
          */
-        public function setup(&$model, $config = array()) {
-                if (is_string($config)) {
-                        $config = array($config);
-                }
+        public function beforeFind(&$model, $query) {
 
-                $this->settings[$model->alias] = $config;
-        }
-
-        /**
-         * After save callback
-         * Saving attachment id to nodeattachment table as node_id,
-         * with parent_node_id = id of parent node (page, block, etc)
-         *
-         * @param object $model
-         * @param boolean $created
-         * @return void
-         */
-        public function  afterSave(&$model, $created) {
-               parent::afterSave($model, $created);
-
-               if ($created && isset($model->data['Nodeattachment']) && ($model->type == 'attachment')) {
-                       $Nodeattachment = &ClassRegistry::init('Nodeattachment.Nodeattachment');
-
-                       // Check for Nodeattachment with node_id of current parent_node_id
-                       // required by Tree behavior
-                       if (!$ParentNode = $Nodeattachment->findByNode_id($model->data['Nodeattachment']['parent_node_id'])) {
-                               $Nodeattachment->create();
-                               $ParentNode = $Nodeattachment->save(array(
-                                        'node_id' => $model->data['Nodeattachment']['parent_node_id'],
-                                        'parent_id' => null
-                               ));
-                               $ParentNode['Nodeattachment']['id'] = $Nodeattachment->id;
-                       }
-                       // Save current node attachment
-                       $Nodeattachment->create();
-                       $res1 = $Nodeattachment->save(array(
-                           'parent_id' => $ParentNode['Nodeattachment']['id'],
-                           'node_id' => $model->id,
-                           'parent_node_id' => $model->data['Nodeattachment']['parent_node_id']
-                       ));
-               }
-        }
-
-        /**
-         * After find callback
-         *
-         * @param object $model
-         * @param array $results
-         * @param boolean $primary
-         * @return array
-         */
-         public function  afterFind(&$model, $results, $primary) {
-                parent::afterFind($model, $results, $primary);
-
-                if ($model->type != 'attachment') {
-                        if ($primary && isset($results[0][$model->alias])) {
-                            foreach ($results AS $i => $result) {
-                                if (isset($results[$i][$model->alias]['title'])) {
-                                    $results[$i]['Attachments'] = $this->_getAttachments($model, $result[$model->alias]['id']);
-                                }
-                            }
-                        } elseif (isset($results[$model->alias])) {
-                            if (isset($results[$model->alias]['title'])) {
-                                $results['Attachments'] = $this->_getAttachments($model, $results[$model->alias]['id']);
-                            }
-                        }
-                }
-
-                return $results;
-
-        }
-
-        /**
-         * Get all attachments for node
-         *
-         * @param object $model
-         * @param integer $nodeid
-         * @return array
-         */
-        private function _getAttachments(&$model, $node_id) {
-
-                if (!is_object($this->Nodeattachmet)) {
-                        $this->Nodeattachment = ClassRegistry::init('Nodeattachment.Nodeattachment');
-                }
-
-                // bind Node model
-                $this->Nodeattachment->bindModel(array(
-                    'belongsTo' => array(
-                        'Node' => array(
-                            'className' => 'Node',
-                            'foreignKey' => 'node_id'
-                        )
-                    )
+                $model->bindModel(array(
+                    'hasMany' => array(
+                        'Nodeattachment' => array(
+                            'order' => 'Nodeattachment.priority ASC'
+                        ))
                 ));
-                // unbind unnecessary models from Node model
-                $this->Nodeattachment->Node->unbindModel(array(
-                    'belongsTo' => array('User'),
-                    'hasMany' => array('Comment', 'Meta'),
-                    'hasAndBelongsToMany' => array('Taxanomy')
-                ));
-                
-                $this->Nodeattachment->Node->recursive = 0;
-                $attachments = $this->Nodeattachment->find('all', array(
-                    'conditions' => array('Nodeattachment.parent_node_id' => $node_id),
-                    'order' => 'Nodeattachment.lft ASC'
-                ));
-                
-                return $attachments;
+
+                return $query;
 
         }
 
-        /**
-         * After delete callback
-         *
-         * @param object $model
-         * @return void
-         */
-        public function  beforeDelete(&$model) {
-                parent::beforeDelete($model);
-
-                $node_id = $model->id;
-
-                $Nodeattachment = ClassRegistry::init('Nodeattachment.Nodeattachment');
-
-                if ($model->type == 'attachment') {
-                        // delete attachment by id
-                        $Nodeattachment->deleteAll(array('Nodeattachment.node_id' => $node_id));
-                } else {
-                        // delete by parent_id
-                        $Nodeattachment->deleteAll(array('Nodeattachment.parent_node_id' => $node_id));
-                }
-        }
 
 }
 ?>

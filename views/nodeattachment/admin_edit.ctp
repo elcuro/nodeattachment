@@ -1,43 +1,61 @@
 <div class="attachments form">
-    <h2><?php echo $title_for_layout; ?></h2>
+        <div class="actions">
+                <ul>
+                        <li>
+                        <?php
+                        echo $this->Ajax->link(__('<< Back', true), array(
+                            'plugin' => 'nodeattachment',
+                            'controller' => 'nodeattachment',
+                            'action' => 'nodeIndex',
+                            $this->data['Nodeattachment']['node_id']),
+                                array('update' => 'attachments-listing', 'indicator' => 'loading')
+                        );
+                        ?>
+                        </li>
+                </ul>
 
-    <?php echo $form->create('Node', array('url' => array('plugin' => false, 'controller' => 'attachments', 'action' => 'edit')));?>
+        </div>
+    <?php echo $this->Form->create('Nodeattachment');?>
         <fieldset>
 
-            <div class="tabs">
-                <ul>
-                    <li><a href="#node-basic"><span><?php __('Attachment'); ?></span></a></li>
-                    <li><a href="#node-info"><span><?php __('Info'); ?></span></a></li>
-                </ul>
-            
                 <div id="node-basic">
                     <div class="thumbnail">
                         <?php
-                            $fileType = explode('/', $this->data['Node']['mime_type']);
+                            $fileType = explode('/', $this->data['Nodeattachment']['mime_type']);
                             $fileType = $fileType['0'];
                             if ($fileType == 'image') {
-                                echo $image->resize('/uploads/'.$this->data['Node']['slug'], 200, 300);
+                                echo $image->resize('/uploads/'.$this->data['Nodeattachment']['slug'], 200, 300);
                             } else {
-                                echo $html->image('/img/icons/' . $filemanager->mimeTypeToImage($this->data['Node']['mime_type'])) . ' ' . $this->data['Node']['mime_type'];
+                                echo $html->image('/img/icons/' . $filemanager->mimeTypeToImage($this->data['Nodeattachment']['mime_type'])) . ' ' . $this->data['Nodeattachment']['mime_type'];
                             }
                         ?>
                     </div>
 
                     <?php
                         echo $form->input('id');
-                        echo $form->input('title');
-                        echo $form->input('excerpt', array('label' => __('Caption', true)));
-                        echo $form->hidden('ParentNode.id', array('value' => $this->data['ParentNode']['Node']['id']));
+                        echo $form->input('title', array('label' => __('Title', true)));
+                        echo $form->input('description', array('label' => __('Description', true)));
+                        echo $form->input('author', array('label' => __('Author', true)));
+                        echo $form->input('author_url', array('label' => __('Author Url', true)));
+                        echo $form->hidden('node_id');
                     ?>
                 </div>
 
                 <div id="node-info">
                     <?php
-                        echo $form->input('file_url', array('label' => __('File URL', true), 'value' => Router::url($this->data['Node']['path'], true), 'readonly' => 'readonly'));
-                        echo $form->input('file_type', array('label' => __('Mime Type', true), 'value' => $this->data['Node']['mime_type'], 'readonly' => 'readonly'));
+                        echo $form->input('file_url', array('label' => __('File URL', true), 'value' => Router::url($this->data['Nodeattachment']['path'], true), 'readonly' => 'readonly'));
+                        echo $form->input('file_type', array('label' => __('Mime Type', true), 'value' => $this->data['Nodeattachment']['mime_type'], 'readonly' => 'readonly'));
                     ?>
                 </div>
-            </div>
         </fieldset>
-    <?php echo $form->end('Submit');?>
+    <?php 
+    echo $this->Ajax->submit(__('Save attachment', true), array(
+        'url' => array(
+            'plugin' => 'nodeattachment',
+            'controller' => 'nodeattachment',
+            'action' => 'edit',
+            $this->data['Nodeattachment']['id']),
+        'update' => 'attachments-listing',
+        'indicator' => 'loading'));
+    ?>
 </div>
