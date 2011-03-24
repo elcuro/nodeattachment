@@ -79,6 +79,13 @@ class NodeattachmentActivation {
          */
         public function onActivation(&$controller) {
 
+                $controller->Setting->write('Nodeattachment.maxFileSize', '3', array(
+                    'editable' => 1, 'description' => __('Max. size of uploaded file (MB)', true))
+                );
+                $controller->Setting->write('Nodeattachment.allowedFileTypes', 'jpg,gif,png', array(
+                    'editable' => 1, 'description' => __('Coma separated list of allowes extensions (empty = all files)', true))
+                );
+
         }
 
         /**
@@ -97,9 +104,9 @@ class NodeattachmentActivation {
                 foreach ($cake_schema_files as $schema_file) {
                         $schema_name = substr($schema_file, 0, -4);
                         $table_name = $schema_name;
-                        if(!$this->db->execute('DROP TABLE '.$table_name)) {
+                        /*if(!$this->db->execute('DROP TABLE '.$table_name)) {
                                 return false;
-                        }
+                        }*/
                 }
                 return true;
 
@@ -113,6 +120,8 @@ class NodeattachmentActivation {
          * @return void
          */
         public function onDeactivation(&$controller) {
+
+                $controller->Setting->deleteKey('Nodeattachment');
 
         }
 

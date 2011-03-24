@@ -103,8 +103,10 @@ class NodeattachmentController extends NodeattachmentAppController {
                 $uploads_path = WWW_ROOT . $this->uploads_dir . DS;
 
                 App::import('Vendor', 'Nodeattachment.file-uploader.php');
-                $allowed_extensions = array();
-                $size_limit = 2 * 1024 * 1024;
+                $allowed_extensions = Configure::read('Nodeattachment.allowedFileTypes');
+                $allowed_extensions = explode(',', $allowed_extensions);
+                $size_limit = Configure::read('Nodeattachment.maxFileSize');
+                $size_limit = $size_limit * 1024 * 1024;
                 $uploader = new qqFileUploader($allowed_extensions, $size_limit);
                 $result = $uploader->handleUpload($uploads_path);
                 $file_name = $uploader->getFilename();
