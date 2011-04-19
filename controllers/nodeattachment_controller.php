@@ -194,6 +194,7 @@ class NodeattachmentController extends NodeattachmentAppController {
          */
         public function admin_addStorageFile() {
 
+                App::import('Core', 'File');              
                 $this->layout = 'ajax';
                 $notice = array();
 
@@ -206,12 +207,10 @@ class NodeattachmentController extends NodeattachmentAppController {
                 }
 
                 $node_id = $this->params['named']['node_id'];
-
-                App::import('Core', 'File');                                
+                                  
 
                 if (!empty($this->params['named']['file'])) {
-
-                        $File = new File($storage_path . DS . $this->params['named']['file']);
+                        
                         // don't overwrite previous files that were uploaded
                         $tmp_filename = explode('.', $this->params['named']['file']);
                         while (file_exists($uploads_path . DS . $tmp_filename[0] . '.' . $tmp_filename[1])) {
@@ -220,6 +219,7 @@ class NodeattachmentController extends NodeattachmentAppController {
                         $file_name = $tmp_filename[0] . '.' . $tmp_filename[1];
 
                         // copy file and save nodeattachment
+                        $File = new File($storage_path . DS . $this->params['named']['file']);
                         if ($File->copy($uploads_path . DS . $file_name, true)) {
                                 $data = array(
                                     'node_id' => $node_id,
