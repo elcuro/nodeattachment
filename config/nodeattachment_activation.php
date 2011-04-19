@@ -85,6 +85,9 @@ class NodeattachmentActivation {
                 $controller->Setting->write('Nodeattachment.allowedFileTypes', 'jpg,gif,png', array(
                     'editable' => 1, 'description' => __('Coma separated list of allowes extensions (empty = all files)', true))
                 );
+                $controller->Setting->write('Nodeattachment.storageUploadDir', '', array(
+                    'editable' => 1, 'description' => __('Big files directory name, dir must be in uploads dir. You can use it for FTP files uploading (e.g. storage)', true))
+                );
 
         }
 

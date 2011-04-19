@@ -48,6 +48,17 @@
         <!-- or put a simple form for upload here -->
     </noscript>
 </div>
+
+<?php
+echo $html->link(__('Attach from server', true), Router::url(array(
+            'controller' => 'nodeattachment',
+            'action' => 'addStorageFile',
+            'plugin' => 'nodeattachment',
+            'node_id' => $this->data['Node']['id']), true) . '?KeepThis=true&TB_iframe=true&height=400&width=600',
+        array(
+            'class' => 'thickbox'));
+?>
+
 <div id="loading" style="display:none;">
         <?php echo $this->Html->image('/nodeattachment/img/loading-big.gif', array('alt' => 'Loader'));?>
 </div>

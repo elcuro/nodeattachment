@@ -187,6 +187,71 @@ class NodeattachmentController extends NodeattachmentAppController {
         }
 
         /**
+         * Attach storage file
+         *
+         * @param string $file_path
+         * @return void
+         */
+        public function admin_addStorageFile() {
+
+                $this->layout = 'ajax';
+                $notice = array();
+
+                $storage_dir = Configure::read('Nodeattachment.storageUploadDir');
+                $storage_path =  ROOT.DS.APP_DIR.DS.WEBROOT_DIR.DS.$this->uploads_dir.DS.$storage_dir;
+                $uploads_path = ROOT.DS.APP_DIR.DS.WEBROOT_DIR.DS.$this->uploads_dir;
+
+                if (empty ($storage_dir) || empty($this->params['named']['node_id'])) {
+                        $this->cakeError('error404');
+                }
+
+                $node_id = $this->params['named']['node_id'];
+
+                App::import('Core', 'File');                                
+
+                if (!empty($this->params['named']['file'])) {
+
+                        $File = new File($storage_path . DS . $this->params['named']['file']);
+                        // don't overwrite previous files that were uploaded
+                        $tmp_filename = explode('.', $this->params['named']['file']);
+                        while (file_exists($uploads_path . DS . $tmp_filename[0] . '.' . $tmp_filename[1])) {
+                                $tmp_filename[0] .= rand(10, 99);
+                        }
+                        $file_name = $tmp_filename[0] . '.' . $tmp_filename[1];
+
+                        // copy file and save nodeattachment
+                        if ($File->copy($uploads_path . DS . $file_name, true)) {
+                                $data = array(
+                                    'node_id' => $node_id,
+                                    'slug' => $file_name,
+                                    'path' => '/' . $this->uploads_dir . '/' . $file_name,
+                                    'title' => $file_name,
+                                    'status' => 1,
+                                    'mime_type' =>
+                                        $this->__getMime($uploads_path . DS . $file_name)
+                                );
+                                if ($this->Nodeattachment->save($data)) {
+                                        unlink($storage_path . DS . $this->params['named']['file']);
+                                        $notice = array(
+                                            'text' => __('File attached', true),
+                                            'class' => 'success');
+                                } else {
+                                        $notice = array(
+                                            'text' => __('Error during nodeattachment saving', true),
+                                            'class' => 'error');
+                                }
+                        }
+                }
+
+                // list files
+                $Folder = new Folder($storage_path);
+                $content = $Folder->read();
+                $this->set(compact('content', 'node_id', 'notice'));
+                
+
+        }
+
+        /**
          * Get mimetype of file
          *
          * @param string $file Filename with full path
