@@ -1,12 +1,30 @@
 <style type="text/css">
+#storage-uploader {
+        width: 20%;
+        float: right;
+}
+#storage-uploader a {
+        display: block;
+        padding: 10px;
+        background-color: #DEDFDE;
+        text-decoration: none;
+        text-align: center;
+        font-weight: bold;
+}
+#storage-uploader a:hover {
+        background:#cc0000;
+        color: white;
+}
+#file-uploader {width: 70%;}
 .qq-uploader { position:relative; width: 100%;}
 
 .qq-upload-button {
     display:block; /* or inline-block */
-    width: 105px; padding: 7px 0; text-align:center;
+    width: 110px; padding: 7px 0; text-align:center;
     background:#DEDFDE; border-bottom:1px solid #ddd;color:#fff;
     color: black;
     position: relative;
+    font-weight: bold;
 }
 .qq-upload-button-hover {background:#cc0000; color: white;}
 .qq-upload-button-focus {outline:1px dotted black;}
@@ -42,6 +60,21 @@
 }
 </style>
 
+<div id="storage-uploader">
+<?php
+$upload_dir = Configure::read('Nodeattachment.storageUploadDir');
+if (!empty($upload_dir)) {
+        echo $html->link(__('Attach from server', true), Router::url(array(
+                    'controller' => 'nodeattachment',
+                    'action' => 'addStorageFile',
+                    'plugin' => 'nodeattachment',
+                    'node_id' => $this->data['Node']['id']), true) . '?KeepThis=true&TB_iframe=true&height=400&width=600',
+                array(
+                    'class' => 'thickbox'));
+}
+?>
+</div>
+
 <div id="file-uploader">
     <noscript>
         <p>Please enable JavaScript to use file uploader.</p>
@@ -49,15 +82,7 @@
     </noscript>
 </div>
 
-<?php
-echo $html->link(__('Attach from server', true), Router::url(array(
-            'controller' => 'nodeattachment',
-            'action' => 'addStorageFile',
-            'plugin' => 'nodeattachment',
-            'node_id' => $this->data['Node']['id']), true) . '?KeepThis=true&TB_iframe=true&height=400&width=600',
-        array(
-            'class' => 'thickbox'));
-?>
+
 
 <div id="loading" style="display:none;">
         <?php echo $this->Html->image('/nodeattachment/img/loading-big.gif', array('alt' => 'Loader'));?>
