@@ -50,7 +50,7 @@ class NodeattachmentHelper extends AppHelper {
          * @param string $type mime type
          * @return array
          */
-        public function getMimeType($type = 'image') {
+        public function getAttachments($type = 'image') {
 
                 return $this->Layout->node['Nodeattachments'][$type];
         }
