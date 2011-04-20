@@ -18,31 +18,52 @@ class NodeattachmentHelper extends AppHelper {
         );
 
         /**
-         * View nodeattachment
+         * Attachment types
          *
-         * @param array $nodeattachment
-         * @param array $options
-         * @return string
+         * @var array
          */
-        public function view($nodeattachment, $options = array()) {
+        public $attachment_types = array(
+            'video',
+            'audio',
+            'application',
+            'text',
+            'image'
+        );
 
-                $_options = array(
-                    'emptyImage' => true,
-                    'width' => 100,
-                    'heigt' => 100,
-                    'link' => false,
-                    'tagAttributes' => array()
-                );
+        /**
+         * After set node callback
+         * Set all attachments by types
+         *
+         * @return void
+         */
+        public function afterSetNode() {
+
+                foreach ($this->attachment_types as $type) {
+                        $attachments[$type] = $this->extractMimeType($this->Layout->node, $type);
+                }
+                $this->Layout->node['Nodeattachments'] = $attachments;
         }
 
         /**
-         * View fallback
+         * Get attachments
          *
-         * @param string $type Mime type
-         * @return string
+         * @param string $type mime type
+         * @return array
          */
-        private function __viewFallback($type) {
+        public function getMimeType($type = 'image') {
 
+                return $this->Layout->node['Nodeattachments'][$type];
+        }
 
+        /**
+         * Extract mime types
+         *
+         * @param array $node
+         * @param string $type Mime Type to extract
+         * @return array
+         */
+        public function extractMimeType($node, $type = 'image') {
+                $nodeattachments = Set::extract('/Nodeattachment[mime_type=/' . $type . '(.*)/]', $node);
+                return $nodeattachments;
         }
 }
