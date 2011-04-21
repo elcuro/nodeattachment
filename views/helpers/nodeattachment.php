@@ -45,6 +45,18 @@ class NodeattachmentHelper extends AppHelper {
         }
 
         /**
+         * Extract mime types from
+         *
+         * @param string $type Mime type
+         * @return array
+         */
+        public function filterMime($type = 'image') {
+
+                return $this->extractMimeType($this->Layout->node, $type);
+        }
+
+        /**
+         * DEPRECATED!!!  use filterMime instead
          * Get attachments
          *
          * @param string $type mime type
@@ -62,7 +74,7 @@ class NodeattachmentHelper extends AppHelper {
          * @param string $type Mime Type to extract
          * @return array
          */
-        public function extractMimeType($node, $type = 'image') {
+        private function extractMimeType($node, $type = 'image') {
                 $nodeattachments = Set::extract('/Nodeattachment[mime_type=/' . $type . '(.*)/]', $node);
                 return $nodeattachments;
         }
