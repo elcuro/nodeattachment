@@ -294,6 +294,7 @@ class NodeattachmentController extends NodeattachmentAppController {
                     'wmv' => 'video/x-ms-wmv',
                     'wma' =>'audio/x-ms-wma',
                     'avi' => 'video/x-msvideo',
+                    'flv' => 'video/x-flv',
 
                     // adobe
                     'pdf' => 'application/pdf',
