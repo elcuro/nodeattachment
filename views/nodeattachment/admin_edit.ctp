@@ -37,6 +37,7 @@
                         echo $form->input('description', array('label' => __('Description', true)));
                         echo $form->input('author', array('label' => __('Author', true)));
                         echo $form->input('author_url', array('label' => __('Author Url', true)));
+                        echo $form->input('status', array('label' => __('Status', true)));
                         echo $form->hidden('node_id');
                     ?>
                 </div>
