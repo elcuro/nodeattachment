@@ -14,6 +14,7 @@ class NodeattachmentHelper extends AppHelper {
          * @var array
          */
         public $helpers = array(
+            'Html',
             'Layout'
         );
 
@@ -31,6 +32,13 @@ class NodeattachmentHelper extends AppHelper {
         );
 
         /**
+         * Nodeattachment
+         *
+         * @var array
+         */
+        public $nodeattachment = array();
+
+        /**
          * After set node callback
          * Set all attachments by types
          *
@@ -42,6 +50,46 @@ class NodeattachmentHelper extends AppHelper {
                         $attachments[$type] = $this->extractMimeType($this->Layout->node, $type);
                 }
                 $this->Layout->node['Nodeattachments'] = $attachments;
+        }
+
+        /**
+         * Set nodeattachment
+         *
+         * @param array $var
+         * @return void
+         */
+        public function set($nodeattachment) {
+
+                $this->nodeattachment = $nodeattachment;
+        }
+
+        /**
+         * Get field from nodeattachment data
+         *
+         * @param string $field
+         * @return void
+         */
+        public function field($field_name = 'id') {
+
+                $model = 'Nodeattachment';
+                if (isset($this->nodeattachment[$model][$field_name])) {
+                        return $this->nodeattachment[$model][$field_name];
+                } else {
+                        return false;
+                }
+        }
+
+        /**
+         * Set nodeattachment field
+         *
+         * @param string $field_name
+         * @param void $value
+         * @return boolean
+         */
+        public function setField($field_name, $value) {
+
+                $model = 'Nodeattachment';
+                $this->nodeattachment[$model][$field_name] = $value;
         }
 
         /**

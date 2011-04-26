@@ -4,6 +4,8 @@
     <tbody id="sortable">
     <?php
         foreach ($attachments AS $attachment) {
+                $this->Nodeattachment->set($attachment);
+
                 $actions = $this->Ajax->link(__('Edit', true), array(
                             'plugin' => 'nodeattachment',
                             'controller' => 'nodeattachment',
@@ -21,13 +23,16 @@
                                 array('update' => 'attachments-listing', 'indicator' => 'loading')
                 );
 
-                $mimeType = explode('/', $attachment['Nodeattachment']['mime_type']);
-                $mimeType = $mimeType['0'];
-                if ($mimeType == 'image') {
+                $thumbnail = $this->Image2->resize(
+                        $this->Nodeattachment->field('thumb_path'),
+                        75, 75, 'resizeRatio', array(), false,
+                        $this->Nodeattachment->field('server_thumb_path'));
+
+                /*if ($mimeType == 'image') {
                         $thumbnail = $this->Html->link($image->resize('/uploads/' . $attachment['Nodeattachment']['slug'], 100, 200), array('controller' => 'nodeattachment', 'action' => 'edit', $attachment['Nodeattachment']['id']), array('escape' => false));
                 } else {
                         $thumbnail = $this->Html->image('/img/icons/page_white.png') . ' ' . $attachment['Nodeattachment']['mime_type'] . ' (' . $filemanager->filename2ext($attachment['Nodeattachment']['slug']) . ')';
-                }
+                }*/
 
                 $row = '';
                 $row .= $this->Html->tag('td', $this->Html->tag('span', '', array('class' => 'ui-icon ui-icon-arrowthick-2-n-s')));
