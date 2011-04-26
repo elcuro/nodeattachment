@@ -169,7 +169,7 @@ class NodeattachmentController extends NodeattachmentAppController {
 
                         $File = new File($storage_path . DS . $this->params['named']['file']);
 
-                        // don't overwrite previous files that were uploaded
+                        // don't overwrite previous files that were uploaded and slug filename
                         $filename['name'] = Inflector::slug($File->name());
                         $filename['ext'] = $File->ext();
                         $filename = $this->__uniqeSlugableFilename($filename);
@@ -188,7 +188,7 @@ class NodeattachmentController extends NodeattachmentAppController {
                                         $this->__getMime($this->uploads_path . DS . $file_name)
                                 );
                                 if ($this->Nodeattachment->save($data)) {
-                                        unlink($storage_path . DS . $this->params['named']['file']);
+                                        //unlink($storage_path . DS . $this->params['named']['file']);
                                         $notice = array(
                                             'text' => __('File attached', true),
                                             'class' => 'success');
