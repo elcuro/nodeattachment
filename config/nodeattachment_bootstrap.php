@@ -1,6 +1,6 @@
 <?php
         Configure::write('Nodeattachment.thumbnailDir', 'tn');
-        Configure::write('Nodeattachment.thumbnailExt', 'jpg');
+        Configure::write('Nodeattachment.thumbnailExt', 'png');
 
         Croogo::hookBehavior('Node', 'Nodeattachment.Nodeattachment');
         Croogo::hookHelper('*', 'Image');
