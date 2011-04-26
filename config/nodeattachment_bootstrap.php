@@ -3,7 +3,7 @@
         Configure::write('Nodeattachment.thumbnailExt', 'png');
 
         Croogo::hookBehavior('Node', 'Nodeattachment.Nodeattachment');
-        Croogo::hookHelper('*', 'Image');
+        Croogo::hookHelper('*', 'Image2');
         Croogo::hookHelper('*', 'Nodeattachment.Nodeattachment');
         Croogo::hookAdminTab('Nodes/admin_edit', 'Attachments', 'nodeattachment.admin_tab_node');
         Croogo::hookAdminMenu('Nodeattachment');

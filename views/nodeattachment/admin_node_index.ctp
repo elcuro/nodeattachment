@@ -4,7 +4,7 @@
     <tbody id="sortable">
     <?php
         foreach ($attachments AS $attachment) {
-                $this->Nodeattachment->set($attachment);
+                $this->Nodeattachment->setNodeattachment($attachment);
 
                 $actions = $this->Ajax->link(__('Edit', true), array(
                             'plugin' => 'nodeattachment',

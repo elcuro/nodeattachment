@@ -15,7 +15,8 @@ class NodeattachmentHelper extends AppHelper {
          */
         public $helpers = array(
             'Html',
-            'Layout'
+            'Layout',
+            'Image2'
         );
 
         /**
@@ -53,14 +54,85 @@ class NodeattachmentHelper extends AppHelper {
         }
 
         /**
+         * Node thumb
+         *
+         * @param string $field Filed of attachment to return
+         * @return string Url of the thumb image
+         */
+        public function nodeThumb($width, $height, $method = 'resizeRatio', $options = array()) {
+
+                $attachment = Set::extract('/Nodeattachment/.[1]', $this->Layout->node);
+                $this->setNodeattachment($attachment[0]);
+                if (!empty($this->nodeattachment)) {
+                        $data = $this->nodeattachment['Nodeattachment'];
+                        return $this->Image2->resize($data['thumb_path'], $width, $height, $method, $options, FALSE, $data['server_thumb_path']);
+                }
+                return false;
+        }
+
+        /**
          * Set nodeattachment
          *
          * @param array $var
          * @return void
          */
-        public function set($nodeattachment) {
+        public function setNodeattachment($nodeattachment) {
 
-                $this->nodeattachment = $nodeattachment;
+                $model = 'Nodeattachment';
+                if (isset($nodeattachment['id'])) {
+                        $data = $nodeattachment;
+                }
+                if (isset($nodeattachment[$model]['id'])) {
+                        $data = $nodeattachment[$model];
+                }
+                $this->nodeattachment[$model] = $this->__thumb($data);
+        }
+
+        /**
+         * Function description
+         *
+         * @param array $var
+         * @return array
+         */
+        private function __thumb($data) {
+
+                $file_type = explode('/', $data['mime_type']);
+                $file_name = explode('.', $data['slug']);
+
+                // image
+                if ($file_type[0] == 'image') {
+                        $data['thumb_path'] = $data['path'];
+                        $data['server_thumb_path'] = ROOT.DS.APP_DIR.DS.WEBROOT_DIR.DS.$data['path'];
+                        return $data;
+                }
+
+                // thumb name with orignial filename
+                $thumb_path = APP . 'plugins' . DS . 'nodeattachment' . DS .
+                      'webroot' . DS . 'img' . DS . Configure::read('Nodeattachment.thumbnailDir');
+                $thumb_filename = $file_name[0] . '.' . Configure::read('Nodeattachment.thumbnailExt');
+                if (file_exists($thumb_path . DS . $thumb_filename)) {
+                        $data['thumb_path'] = '/nodeattachment/img/'.Configure::read('Nodeattachment.thumbnailDir').'/'.
+                                $thumb_filename;
+                        $data['server_thumb_path'] = $thumb_path . DS . $thumb_filename;
+                        return $data;
+                }
+
+                // thumb name with type filename
+                $thumb_path = APP . 'plugins' . DS . 'nodeattachment' . DS .
+                      'webroot' . DS . 'img';
+                $thumb_filename = 'thumb_' . $file_type[0] . '.' . Configure::read('Nodeattachment.thumbnailExt');
+                if (file_exists($thumb_path . DS . $thumb_filename)) {
+                        $data['thumb_path'] = '/nodeattachment/img/' . $thumb_filename;
+                        $data['server_thumb_path'] = $thumb_path . DS . $thumb_filename;
+                        return $data;
+                } else {
+                        $data['thumb_path'] = '/nodeattachment/img/thumb_default.' .
+                                Configure::read('Nodeattachment.thumbnailExt');
+                        $data['server_thumb_path'] = $thumb_path . DS .
+                                'thumb_default.' . Configure::read('Nodeattachment.thumbnailExt');
+                        return $data;
+                }
+
         }
 
         /**
