@@ -88,11 +88,8 @@ class NodeattachmentActivation {
                 $controller->Setting->write('Nodeattachment.storageUploadDir', '', array(
                     'editable' => 1, 'description' => __('Big files directory name, dir must be in uploads dir. You can use it for FTP files uploading (e.g. storage)', true))
                 );
-                $controller->Setting->write('Nodeattachment.ffmpegDir', '', array(
-                    'editable' => 1, 'description' => __('Directory with ffmpeg, leave empty if ffmpeg is not installed', true))
-                );
-                $controller->Setting->write('Nodeattachment.videoThumbsDir', 'tn-video', array(
-                    'editable' => 1, 'description' => __('Directory for video thumbnail, must be placed in upload dir', true))
+                $controller->Setting->write('Nodeattachment.ffmpegDir', 'n/a', array(
+                    'editable' => 1, 'description' => __('Directory with ffmpeg, type n/a if not installed', true))
                 );
 
         }
