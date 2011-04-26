@@ -114,7 +114,7 @@ class Nodeattachment extends NodeattachmentAppModel {
                 $is_video = strpos($this->data['Nodeattachment']['mime_type'], 'video');
                 $filename_expl = explode('.', $this->data['Nodeattachment']['slug']);
 
-                if (!empty($ffmpeg_path) && $created && ($is_video === 0)) {
+                if (($ffmpeg_path <> 'n/a') && $created && ($is_video === 0)) {
                         $in = $source_path . DS . $this->data['Nodeattachment']['slug'];
                         $out = $thumb_path . DS . $filename_expl[0] . '.' . Configure::read('Nodeattachment.thumbnailExt');
                         $cmd = $ffmpeg_path . 'ffmpeg -i'." $in -pix_fmt rgb24 -vframes 1 -s 600x400 $out 2>&1";
