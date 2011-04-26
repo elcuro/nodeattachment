@@ -39,6 +39,8 @@
                         echo $form->input('author_url', array('label' => __('Author Url', true)));
                         echo $form->input('status', array('label' => __('Status', true)));
                         echo $form->hidden('node_id');
+                        echo $form->hidden('mime_type');
+                        echo $form->hidden('slug');
                     ?>
                 </div>
 
