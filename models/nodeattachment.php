@@ -52,7 +52,7 @@ class Nodeattachment extends NodeattachmentAppModel {
                 if (($conf['ffmpegDir'] <> 'n/a') && $created && ($filename_expl[1] <> 'flv')) {
                         $in = $source_path . DS . $this->data['Nodeattachment']['slug'];
                         $out = $conf['flvDir'] . DS . $filename_expl[0] . '.flv';
-                        $cmd = $conf['ffmpegDir'] . "ffmpeg -v 0 -i $in -ar 11025 $out > tmp.log";
+                        $cmd = $conf['ffmpegDir'] . "ffmpeg -v 0 -i $in -ar 11025 $out";
                         //$cmd = $ffmpeg_path ."ffmpeg -i $in -ab 56 -ar 44100 -b 200 -r 15 -s 320x240 -f flv $out 2>&1 &";
                         $this->__execFFmpeg($cmd);
                 }
@@ -76,7 +76,7 @@ class Nodeattachment extends NodeattachmentAppModel {
                         $in = $source_path . DS . $this->data['Nodeattachment']['slug'];
                         $out = $conf['thumbDir'] . DS . $filename_expl[0] . '%d.' . $conf['thumbExt'];
                         $cmd = $conf['ffmpegDir'] . "ffmpeg -i $in -pix_fmt rgb24 -vframes 1 -s 600x400 $out";
-                        $this->__execFFmpeg($cmd);
+                        $this->__execFFmpeg($cmd, false);
 
                         // fix for linux based servers, which accept only out%d.jpg in ffmpeg convert function
                         $old_out = $conf['thumbDir'] . DS . $filename_expl[0] . '1.' . $conf['thumbExt'];
@@ -91,11 +91,11 @@ class Nodeattachment extends NodeattachmentAppModel {
          * @param string ffmpeg command
          * @return void
          */
-        private function __execFFmpeg($cmd) {
+        private function __execFFmpeg($cmd, $exec = true) {
 
-                $run_exec = Configure::read('Nodeattachment.ffmpegExec');
+                $conf_exec = Configure::read('Nodeattachment.ffmpegExec');
                 
-                if ($run_exec == 1) {
+                if (($conf_exec == 1) && ($exec == true)) {
                         $cmd .= ' > /dev/null 2>&1 &';
                         exec($cmd);
                 } else {
