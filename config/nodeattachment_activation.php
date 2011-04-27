@@ -85,11 +85,16 @@ class NodeattachmentActivation {
                 $controller->Setting->write('Nodeattachment.allowedFileTypes', 'jpg,gif,png', array(
                     'editable' => 1, 'description' => __('Coma separated list of allowes extensions (empty = all files)', true))
                 );
-                $controller->Setting->write('Nodeattachment.storageUploadDir', '', array(
+                $controller->Setting->write('Nodeattachment.storageUploadDir', 'storage', array(
                     'editable' => 1, 'description' => __('Big files directory name, dir must be in uploads dir. You can use it for FTP files uploading (e.g. storage)', true))
                 );
                 $controller->Setting->write('Nodeattachment.ffmpegDir', 'n/a', array(
                     'editable' => 1, 'description' => __('Directory with ffmpeg, type n/a if not installed', true))
+                );
+                $controller->Setting->write('Nodeattachment.ffmpegExec', 0, array(
+                    'editable' => 1,
+                    'description' => __('Run ffmpeg via exec(), more info about permission at http://en.php.net/manual/en/function.exec.php ', true),
+                    'input_type' => 'checkbox')
                 );
 
         }

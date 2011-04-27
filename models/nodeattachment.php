@@ -30,7 +30,32 @@ class Nodeattachment extends NodeattachmentAppModel {
          */
         public function afterSave($created = false) {
 
-                $this->__createVideoThumb($created);
+                $is_video = strpos($this->data['Nodeattachment']['mime_type'], 'video');
+                if ($is_video === 0) {
+                        $this->__createVideoThumb($created);
+                        $this->__createFlv($created);
+                }
+        }
+
+        /**
+         * Create flv
+         *
+         * @param boolean $created
+         * @return void
+         */
+        private function __createFlv($created) {
+
+                $conf = Configure::read('Nodeattachment');
+                $source_path = WWW_ROOT . $this->uploads_dir;
+                $filename_expl = explode('.', $this->data['Nodeattachment']['slug']);
+
+                if (($conf['ffmpegDir'] <> 'n/a') && $created && ($filename_expl[1] <> 'flv')) {
+                        $in = $source_path . DS . $this->data['Nodeattachment']['slug'];
+                        $out = $conf['flvDir'] . DS . $filename_expl[0] . '.flv';
+                        $cmd = $conf['ffmpegDir'] . "ffmpeg -v 0 -i $in -ar 11025 $out > tmp.log";
+                        //$cmd = $ffmpeg_path ."ffmpeg -i $in -ab 56 -ar 44100 -b 200 -r 15 -s 320x240 -f flv $out 2>&1 &";
+                        $this->__execFFmpeg($cmd);
+                }
         }
 
         /**
@@ -44,28 +69,19 @@ class Nodeattachment extends NodeattachmentAppModel {
 
                 $conf = Configure::read('Nodeattachment');
                 $source_path = WWW_ROOT . $this->uploads_dir;
-
-                $is_video = strpos($this->data['Nodeattachment']['mime_type'], 'video');
                 $filename_expl = explode('.', $this->data['Nodeattachment']['slug']);
 
-                if (($conf['ffmpegDir'] <> 'n/a') && $created && ($is_video === 0)) {
+                if (($conf['ffmpegDir'] <> 'n/a') && $created) {
                         //create thumb
                         $in = $source_path . DS . $this->data['Nodeattachment']['slug'];
-                        $out = $conf['thumbDir'] . $filename_expl[0] . '%d.' . $conf['thumbExt'];
-                        $cmd = $ffmpeg_path . "ffmpeg -i $in -pix_fmt rgb24 -vframes 1 -s 600x400 $out 2>&1";
+                        $out = $conf['thumbDir'] . DS . $filename_expl[0] . '%d.' . $conf['thumbExt'];
+                        $cmd = $conf['ffmpegDir'] . "ffmpeg -i $in -pix_fmt rgb24 -vframes 1 -s 600x400 $out";
                         $this->__execFFmpeg($cmd);
+
                         // fix for linux based servers, which accept only out%d.jpg in ffmpeg convert function
                         $old_out = $conf['thumbDir'] . DS . $filename_expl[0] . '1.' . $conf['thumbExt'];
                         $new_out = $conf['thumbDir'] . DS . $filename_expl[0] . '.' . $conf['thumbExt'];
                         rename($old_out, $new_out);
-
-                        // create flv
-                        if ($filename_expl[1] <> 'flv') {
-                                $out = $conf['flvDir'] . DS . $filename_expl[0] . '.flv';
-                                $cmd = $conf['ffmpegDir'] . "ffmpeg -v 0 -i $in -ar 11025 $out > tmp.log 2>&1 &";
-                                //$cmd = $ffmpeg_path ."ffmpeg -i $in -ab 56 -ar 44100 -b 200 -r 15 -s 320x240 -f flv $out 2>&1 &";
-                                $this->__execFFmpeg($cmd);
-                        }
                 }
         }
 
@@ -75,15 +91,17 @@ class Nodeattachment extends NodeattachmentAppModel {
          * @param string ffmpeg command
          * @return void
          */
-        private function __execFFmpeg($cmd = null) {
+        private function __execFFmpeg($cmd) {
 
-                /*if (!is_null($cmd)) {
-                        $fh = popen($cmd, "r" );
+                $run_exec = Configure::read('Nodeattachment.ffmpegExec');
+                
+                if ($run_exec == 1) {
+                        $cmd .= ' > /dev/null 2>&1 &';
+                        exec($cmd);
+                } else {
+                        $fh = popen($cmd.'  2>&1', "r" );
                         while( fgets( $fh ) ) { }
                         pclose( $fh );
-                }*/
-                if (!is_null($cmd)) {
-                        exec($cmd);
                 }
         }
 
