@@ -249,7 +249,6 @@ class NodeattachmentController extends NodeattachmentAppController {
                 if (!$this->Nodeattachment->delete($id)) {
                         // delete error redirect
                 }
-                unlink(WWW_ROOT . $this->uploads_dir . DS . $attachment['Nodeattachment']['slug']);
                 $this->redirect(array('action' => 'nodeIndex', $attachment['Nodeattachment']['node_id']));
         }
 

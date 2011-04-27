@@ -48,8 +48,9 @@ class Nodeattachment extends NodeattachmentAppModel {
                $filename_expl = explode('.', $this->data['Nodeattachment']['slug']);
 
                $files_to_delete = array(
-                   $conf['flvDir'] . DS . $filename_expl[0] . '.flv',
-                   $conf['thumbDir'] . DS . $filename_expl[0] . '.' . $conf['thumbExt']
+                   WWW_ROOT . $this->uploads_dir . DS . $this->data['Nodeattachment']['slug'], // uploaded file
+                   $conf['flvDir'] . DS . $filename_expl[0] . '.flv', // flv variant
+                   $conf['thumbDir'] . DS . $filename_expl[0] . '.' . $conf['thumbExt'], // video thumb
                );
                foreach($files_to_delete as $file) {
                        if (file_exists($file)) {
