@@ -52,12 +52,17 @@ class Nodeattachment extends NodeattachmentAppModel {
 
                 if (($ffmpeg_path <> 'n/a') && $created && ($is_video === 0)) {
                         $in = $source_path . DS . $this->data['Nodeattachment']['slug'];
-                        $out = $thumb_path . DS . $filename_expl[0] . '.' . Configure::read('Nodeattachment.thumbnailExt');
+                        $out = $thumb_path . DS . $filename_expl[0] . '%d.' . Configure::read('Nodeattachment.thumbnailExt');
                         $cmd = $ffmpeg_path . 'ffmpeg -i'." $in -pix_fmt rgb24 -vframes 1 -s 600x400 $out 2>&1";
                         $fh = popen($cmd, "r" );
                         while( fgets( $fh ) ) { }
                         pclose( $fh );
                 }
+
+                // fix for linux based servers, which accept only out%d.jpg in ffmpeg convert function
+                $old_out = $thumb_path . DS . $filename_expl[0] . '1.' . Configure::read('Nodeattachment.thumbnailExt');
+                $new_out = $thumb_path . DS . $filename_expl[0] . '.' . Configure::read('Nodeattachment.thumbnailExt');
+                rename($old_out, $new_out);
         }
 
 
