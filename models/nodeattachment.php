@@ -38,6 +38,27 @@ class Nodeattachment extends NodeattachmentAppModel {
         }
 
         /**
+         * After delete callback
+         *
+         * @return void
+         */
+        public function afterDelete() {
+
+               $conf = Configure::read('Nodeattachment');
+               $filename_expl = explode('.', $this->data['Nodeattachment']['slug']);
+
+               $files_to_delete = array(
+                   $conf['flvDir'] . DS . $filename_expl[0] . '.flv',
+                   $conf['thumbDir'] . DS . $filename_expl[0] . '.' . $conf['thumbExt']
+               );
+               foreach($files_to_delete as $file) {
+                       if (file_exists($file)) {
+                               unlink($file);
+                       }
+               }
+        }
+
+        /**
          * Create flv
          *
          * @param boolean $created
