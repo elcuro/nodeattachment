@@ -99,7 +99,7 @@ class Nodeattachment extends NodeattachmentAppModel {
                         $cmd = $conf['ffmpegDir'] . "ffmpeg -i $in -pix_fmt rgb24 -vframes 1 -s 600x400 $out";
                         $this->__execFFmpeg($cmd, false);
 
-                        // fix for linux based servers, which accept only out%d.jpg in ffmpeg convert function
+                        // fix for linux based servers, which accept only outfilename%d.jpg in ffmpeg convert function
                         $old_out = $conf['thumbDir'] . DS . $filename_expl[0] . '1.' . $conf['thumbExt'];
                         $new_out = $conf['thumbDir'] . DS . $filename_expl[0] . '.' . $conf['thumbExt'];
                         rename($old_out, $new_out);
