@@ -95,7 +95,8 @@ class NodeattachmentHelper extends AppHelper {
                 if (isset($nodeattachment[$model]['id'])) {
                         $data = $nodeattachment[$model];
                 }
-                $this->nodeattachment[$model] = $this->__thumb($data);
+                $this->nodeattachment[$model] = $data;
+                $this->__thumb();
         }
 
         /**
@@ -104,7 +105,9 @@ class NodeattachmentHelper extends AppHelper {
          * @param array $var
          * @return array
          */
-        private function __thumb($data) {
+        private function __thumb() {
+
+                $data = $this->nodeattachment['Nodeattachment'];
 
                 $file_type = explode('/', $data['mime_type']);
                 $file_name = explode('.', $data['slug']);
@@ -113,7 +116,8 @@ class NodeattachmentHelper extends AppHelper {
                 if ($file_type[0] == 'image') {
                         $data['thumb_path'] = $data['path'];
                         $data['server_thumb_path'] = ROOT.DS.APP_DIR.DS.WEBROOT_DIR.DS.$data['path'];
-                        return $data;
+                        $this->nodeattachment['Nodeattachment'] = $data;
+                        return;
                 }
 
                 // thumb name with orignial filename
@@ -121,7 +125,8 @@ class NodeattachmentHelper extends AppHelper {
                 if (file_exists($this->conf['thumbDir'] . DS . $thumb_filename)) {
                         $data['thumb_path'] = '/nodeattachment/img/tn/'. $thumb_filename;
                         $data['server_thumb_path'] = $this->conf['thumbDir'] . DS . $thumb_filename;
-                        return $data;
+                        $this->nodeattachment['Nodeattachment'] = $data;
+                        return;
                 }
 
                 // thumb name with type filename
@@ -129,12 +134,14 @@ class NodeattachmentHelper extends AppHelper {
                 if (file_exists($this->conf['iconDir'] . DS . $thumb_filename)) {
                         $data['thumb_path'] = '/nodeattachment/img/' . $thumb_filename;
                         $data['server_thumb_path'] = $this->conf['iconDir'] . DS . $thumb_filename;
-                        return $data;
+                        $this->nodeattachment['Nodeattachment'] = $data;
+                        return;
                 } else {
                         $data['thumb_path'] = '/nodeattachment/img/thumb_default.' . $this->conf['thumbExt'];
                         $data['server_thumb_path'] = $thumb_path . DS .
                                 'thumb_default.' . $this->conf['thumbExt'];
-                        return $data;
+                        $this->nodeattachment['Nodeattachment'] = $data;
+                        return;
                 }
 
         }
