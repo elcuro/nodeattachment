@@ -74,8 +74,7 @@ class NodeattachmentHelper extends AppHelper {
                 $attachment = Set::extract('/Nodeattachment/.[1]', $this->Layout->node);
                 $this->setNodeattachment($attachment[0]);
                 if (!empty($this->nodeattachment)) {
-                        $data = $this->nodeattachment['Nodeattachment'];
-                        return $this->Image2->resize($data['thumb_path'], $width, $height, $method, $options, FALSE, $data['server_thumb_path']);
+                        return $this->Image2->resize($this->field('thumb_path'), $width, $height, $method, $options, FALSE, $this->field('server_thumb_path'));
                 }
                 return false;
         }
@@ -97,10 +96,30 @@ class NodeattachmentHelper extends AppHelper {
                 }
                 $this->nodeattachment[$model] = $data;
                 $this->__thumb();
+                $this->__flv();
         }
 
         /**
-         * Function description
+         * If file (video) has flv variant
+         *
+         * @return void
+         */
+        private function __flv() {
+
+                $is_video = strpos($this->field('mime_type'), 'video');
+                if ($is_video === 0) {
+                        $file_name = explode('.', $this->field('slug'));
+                        $flv_file = $this->conf['flvDir'] . DS . $file_name[0] . '.flv';
+                        if (file_exists($flv_file)) {
+                                $this->setField('flv_path',
+                                        '/nodeattachment/flv/' . $file_name[0] . '.flv'
+                                );
+                        }
+                }
+        }
+
+        /**
+         * Thumbnails
          *
          * @param array $var
          * @return array
