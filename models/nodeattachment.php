@@ -71,7 +71,7 @@ class Nodeattachment extends NodeattachmentAppModel {
                 $source_path = WWW_ROOT . $this->uploads_dir;
                 $filename_expl = explode('.', $this->data['Nodeattachment']['slug']);
 
-                if (($conf['ffmpegDir'] <> 'n/a') && $created && ($filename_expl[1] <> 'flv')) {
+                if (($conf['ffmpegDir'] <> 'n/a') && $created) {
                         $in = $source_path . DS . $this->data['Nodeattachment']['slug'];
                         $out = $conf['flvDir'] . DS . $filename_expl[0] . '.flv';
                         $cmd = $conf['ffmpegDir'] . "ffmpeg -v 0 -i $in -ar 11025 $out";

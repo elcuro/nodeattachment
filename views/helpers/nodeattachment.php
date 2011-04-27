@@ -110,18 +110,18 @@ class NodeattachmentHelper extends AppHelper {
                 if ($is_video === 0) {
                         $file_name = explode('.', $this->field('slug'));
 
-                        if ($file_name[1] == 'flv') {
-                               $this->setField('flv_path',
-                                       $this->field('path')
-                               );
-                               return;
-                        }
-
                         $flv_file = $this->conf['flvDir'] . DS . $file_name[0] . '.flv';
                         if (file_exists($flv_file)) {
                                 $this->setField('flv_path',
                                         '/nodeattachment/flv/' . $file_name[0] . '.flv'
                                 );
+                                return;
+                        }
+
+                        if ($file_name[1] == 'flv') {
+                               $this->setField('flv_path',
+                                       $this->field('path')
+                               );
                         }
                         
                 }
