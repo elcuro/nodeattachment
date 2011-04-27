@@ -40,6 +40,16 @@ class NodeattachmentHelper extends AppHelper {
         public $nodeattachment = array();
 
         /**
+         * Before render callback
+         *
+         * @return void
+         */
+        public function beforeRender() {
+
+                $this->conf = Configure::read('Nodeattachment');
+        }
+
+        /**
          * After set node callback
          * Set all attachments by types
          *
@@ -107,29 +117,23 @@ class NodeattachmentHelper extends AppHelper {
                 }
 
                 // thumb name with orignial filename
-                $thumb_path = APP . 'plugins' . DS . 'nodeattachment' . DS .
-                      'webroot' . DS . 'img' . DS . Configure::read('Nodeattachment.thumbnailDir');
                 $thumb_filename = $file_name[0] . '.' . Configure::read('Nodeattachment.thumbnailExt');
-                if (file_exists($thumb_path . DS . $thumb_filename)) {
-                        $data['thumb_path'] = '/nodeattachment/img/'.Configure::read('Nodeattachment.thumbnailDir').'/'.
-                                $thumb_filename;
-                        $data['server_thumb_path'] = $thumb_path . DS . $thumb_filename;
+                if (file_exists($this->conf['thumbDir'] . DS . $thumb_filename)) {
+                        $data['thumb_path'] = '/nodeattachment/img/tn/'. $thumb_filename;
+                        $data['server_thumb_path'] = $this->conf['thumbDir'] . DS . $thumb_filename;
                         return $data;
                 }
 
                 // thumb name with type filename
-                $thumb_path = APP . 'plugins' . DS . 'nodeattachment' . DS .
-                      'webroot' . DS . 'img';
                 $thumb_filename = 'thumb_' . $file_type[0] . '.' . Configure::read('Nodeattachment.thumbnailExt');
-                if (file_exists($thumb_path . DS . $thumb_filename)) {
+                if (file_exists($this->conf['iconDir'] . DS . $thumb_filename)) {
                         $data['thumb_path'] = '/nodeattachment/img/' . $thumb_filename;
-                        $data['server_thumb_path'] = $thumb_path . DS . $thumb_filename;
+                        $data['server_thumb_path'] = $this->conf['iconDir'] . DS . $thumb_filename;
                         return $data;
                 } else {
-                        $data['thumb_path'] = '/nodeattachment/img/thumb_default.' .
-                                Configure::read('Nodeattachment.thumbnailExt');
+                        $data['thumb_path'] = '/nodeattachment/img/thumb_default.' . $this->conf['thumbExt'];
                         $data['server_thumb_path'] = $thumb_path . DS .
-                                'thumb_default.' . Configure::read('Nodeattachment.thumbnailExt');
+                                'thumb_default.' . $this->conf['thumbExt'];
                         return $data;
                 }
 

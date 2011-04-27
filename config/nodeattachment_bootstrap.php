@@ -1,5 +1,16 @@
 <?php
-        Configure::write('Nodeattachment.thumbnailDir', 'tn');
+        $tmp_conf = Configure::read('Nodeattachment');
+        $conf = array(
+            'thumbDir' => APP . 'plugins' . DS . 'nodeattachment' . DS .
+                'webroot' . DS . 'img' . DS . 'tn',
+            'iconDir' => APP . 'plugins' . DS . 'nodeattachment' . DS .
+                'webroot' . DS . 'img',
+            'flvDir' => APP . 'plugins' . DS . 'nodeattachment' . DS .
+                'webroot' . DS .'flv',
+            'thumbExt' => 'png'
+        );
+        Configure::write('Nodeattachment', Set::merge($tmp_conf, $conf));
+
         Configure::write('Nodeattachment.thumbnailExt', 'png');
 
         Croogo::hookBehavior('Node', 'Nodeattachment.Nodeattachment');
