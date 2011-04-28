@@ -317,7 +317,7 @@ class NodeattachmentController extends NodeattachmentAppController {
                     'flv' => 'video/x-flv',
                     'wav' => 'audio/wav',
                     'mid' => 'audio/mid',
-                    'mp3' => 'audio/x-mpegurl',
+                    'mp4' => 'video/mp4',
 
 
                     // adobe
