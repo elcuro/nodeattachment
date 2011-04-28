@@ -207,6 +207,26 @@ class NodeattachmentController extends NodeattachmentAppController {
         }
 
         /**
+         * Delete storage file
+         *
+         * @return void
+         */
+        public function admin_deleteStorageFile() {
+
+                $storage_dir = Configure::read('Nodeattachment.storageUploadDir');
+                $storage_path =  ROOT.DS.APP_DIR.DS.WEBROOT_DIR.DS.$this->uploads_dir.DS.$storage_dir;
+                if (!empty($this->params['named']['file'])) {
+                        unlink($storage_path . DS . $this->params['named']['file']);
+                }
+                $this->redirect(array(
+                        'plugin' => 'nodeattachment',
+                        'controller' => 'nodeattachment',
+                        'action' => 'addStorageFile',
+                        'node_id' => $this->params['named']['node_id'])
+                );
+        }
+
+        /**
          * Unique filename for upload
          *
          * @param array $filename
