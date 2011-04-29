@@ -5,6 +5,7 @@
     <?php
         foreach ($attachments AS $attachment) {
                 $this->Nodeattachment->setNodeattachment($attachment);
+                $file_name = explode('.', $this->Nodeattachment->field('slug'));
 
                 $actions = $this->Ajax->link(__('Edit', true), array(
                             'plugin' => 'nodeattachment',
@@ -25,7 +26,8 @@
 
                 $thumbnail = $this->Image2->resize(
                         $this->Nodeattachment->field('thumb_path'),
-                        75, 75, 'resizeRatio', array(), false,
+                        75, 75, 'resizeRatio', 
+                        array('alt' => $this->Nodeattachment->field('slug')), false,
                         $this->Nodeattachment->field('server_thumb_path'));
 
                 /*if ($mimeType == 'image') {
@@ -38,6 +40,7 @@
                 $row .= $this->Html->tag('td', $this->Html->tag('span', '', array('class' => 'ui-icon ui-icon-arrowthick-2-n-s')));
                 $row .= $this->Html->tag('td', $attachment['Nodeattachment']['id']);
                 $row .= $this->Html->tag('td', $thumbnail);
+                $row .= $this->Html->tag('td', '('.$file_name[1].')');
                 $row .= $this->Html->tag('td', $attachment['Nodeattachment']['title']);
                 $row .= $this->Html->tag('td', $actions);
                 echo $this->Html->tag(
