@@ -156,10 +156,9 @@ class NodeattachmentController extends NodeattachmentAppController {
                 $this->layout = 'ajax';
                 $notice = array();
 
-                $storage_dir = Configure::read('Nodeattachment.storageUploadDir');
-                $storage_path =  ROOT.DS.APP_DIR.DS.WEBROOT_DIR.DS.$this->uploads_dir.DS.$storage_dir;
+                $storage_path = Configure::read('Nodeattachment.storageUploadDir');
 
-                if (empty ($storage_dir) || empty($this->params['named']['node_id'])) {
+                if (empty ($storage_path) || empty($this->params['named']['node_id'])) {
                         $this->cakeError('error404');
                 }
 
@@ -213,8 +212,8 @@ class NodeattachmentController extends NodeattachmentAppController {
          */
         public function admin_deleteStorageFile() {
 
-                $storage_dir = Configure::read('Nodeattachment.storageUploadDir');
-                $storage_path =  ROOT.DS.APP_DIR.DS.WEBROOT_DIR.DS.$this->uploads_dir.DS.$storage_dir;
+                $storage_path = Configure::read('Nodeattachment.storageUploadDir');
+
                 if (!empty($this->params['named']['file'])) {
                         unlink($storage_path . DS . $this->params['named']['file']);
                 }
