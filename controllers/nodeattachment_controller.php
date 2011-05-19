@@ -368,6 +368,75 @@ class NodeattachmentController extends NodeattachmentAppController {
                 }
         }
 
+        /**
+         * All attachments on site by node
+         *
+         * @return void
+         */
+        public function all() {
+
+                $this->set('title_for_layout', __('All attachments', true));
+
+                $this->paginate['Node']['order'] = 'Node.created DESC';
+                $this->paginate['Node']['limit'] = Configure::read('Reading.nodes_per_page');
+                $this->paginate['Node']['conditions'] = array(
+                    'Node.status' => 1,
+                    'OR' => array(
+                        'Node.visibility_roles' => '',
+                        'Node.visibility_roles LIKE' => '%"' . $this->Croogo->roleId . '"%',
+                    ),
+                );
+                $this->paginate['Node']['contain'] = array(
+                    'Meta',
+                    'Taxonomy' => array(
+                        'Term',
+                        'Vocabulary',
+                    ),
+                    'User',
+                    'Nodeattachment'
+                );
+
+                if (isset($this->params['named']['type'])) {
+                    $type = $this->Node->Taxonomy->Vocabulary->Type->findByAlias($this->params['named']['type']);
+                    if (!isset($type['Type']['id'])) {
+                        $this->Session->setFlash(__('Invalid content type.', true), 'default', array('class' => 'error'));
+                        $this->redirect('/');
+                    }
+                    if (isset($type['Params']['nodes_per_page'])) {
+                        $this->paginate['Node']['limit'] = $type['Params']['nodes_per_page'];
+                    }
+                    $this->paginate['Node']['conditions']['Node.type'] = $type['Type']['alias'];
+                    $this->set('title_for_layout', $type['Type']['title']);
+                    $this->set(compact('type'));
+                }
+
+                if ($this->usePaginationCache) {
+                    $cacheNamePrefix = 'nodes_promoted_'.$this->Croogo->roleId.'_'.Configure::read('Config.language');
+                    if (isset($type)) {
+                        $cacheNamePrefix .= '_'.$type['Type']['alias'];
+                    }
+                    $this->paginate['page'] = isset($this->params['named']['page']) ? $this->params['named']['page'] : 1;
+                    $cacheName = $cacheNamePrefix.'_'.$this->paginate['page'].'_'.$this->paginate['Node']['limit'];
+                    $cacheNamePaging = $cacheNamePrefix.'_'.$this->paginate['page'].'_'.$this->paginate['Node']['limit'].'_paging';
+                    $cacheConfig = 'nodes_promoted';
+                    $nodes = Cache::read($cacheName, $cacheConfig);
+                    if (!$nodes) {
+                        $nodes = $this->paginate('Node');
+                        Cache::write($cacheName, $nodes, $cacheConfig);
+                        Cache::write($cacheNamePaging, $this->params['paging'], $cacheConfig);
+                    } else {
+                        $paging = Cache::read($cacheNamePaging, $cacheConfig);
+                        $this->params['paging'] = $paging;
+                        $this->helpers[] = 'Paginator';
+                    }
+                } else {
+                    $nodes = $this->paginate('Node');
+                }
+                //debug($nodes);
+                $this->set(compact('nodes'));
+
+        }
+
 
 }
 ?>

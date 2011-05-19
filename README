@@ -1,16 +1,42 @@
 Croogo Nodeattachment  plugin
 ------------------------------
-Attach various types of files to node,
-AJAX multiple file upload
+Attach various types of files to node
+- AJAX multiple file upload
+- if is installed ffmpeg, create splash image and convert files to flv
 
-!!! Not compatible with previos version of this plugin (0.1)
+!!! Not compatible with previous version of this plugin (0.1)
 To view previous version switch tag to 0.1
 
 
-How to use
+Dependecies
+------------------------------
+- Image2 plugin required for thumbnails of files
+
+
+How to intall
 ------------------------------
 - Log in to admin panel
 - Go to Extensions > Plugins page
 - Upload the zip file (available here)
+- Set write permission for dir 'app/plugins/nodeattachment/webroot/flv
+- Set write permission for dir 'app/plugins/nodeattachment/webroot/img/tn
 - Click on tick/cross icon of 'Nodeattachment' for activating or deactivating the plugin
+- Don't remember activate Image2 plugin also
 
+
+Base configuration
+------------------------------
+MaxFileSize: Max. size of files uploaded via http
+
+AllowedFileTypes: Allowed file types uploaded via http
+
+StorageUploadDir (optional): Full path to storage, where you can (FTP) upload your big files. E.g. /server_path/app/plugins/nodeattachment/webroot/storage
+Don't remember to set permission for write.
+
+FfmpegDir (optional): If you have installed ffmpeg on server, type full path to ffmpeg here e.g.: C:\ffmpeg. On linux server leave empty.
+If ffmpeg is not installed on server, type 'n/a'
+More info about ffmpeg: http://ffmpeg.org/
+
+FfmpegExec (optional): Run ffmpeg via exec function (in background). This is perfect solution for convert big files in background, while php script continue as ordinary
+Be sure you have all neccessary permission to run ffmpeg with exec (safe_mode etc.)
+More info about exec http://php.net/manual/en/function.exec.php
