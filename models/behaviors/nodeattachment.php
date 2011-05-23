@@ -23,7 +23,7 @@ class NodeattachmentBehavior extends ModelBehavior {
                         'Nodeattachment' => array(
                             'order' => array(
                                 'Nodeattachment.priority ASC',
-                                /*'Nodeattachment.created ASC'*/)
+                                'Nodeattachment.created ASC')
                         ))
                 ));
 

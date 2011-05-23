@@ -314,7 +314,8 @@ class NodeattachmentController extends NodeattachmentAppController {
 
                                 $data['Nodeattachment']['priority'] = 1;
 
-                                debug($data);
+                                $this->Nodeattachment->create();
+                                $this->Nodeattachment->save($data);
                         }
                 }
                 
