@@ -30,10 +30,17 @@ class Nodeattachment extends NodeattachmentAppModel {
          */
         public function afterSave($created = false) {
 
+                // convert video
                 $is_video = strpos($this->data['Nodeattachment']['mime_type'], 'video');
                 if ($is_video === 0) {
                         $this->__createVideoThumb($created);
                         $this->__createFlv($created);
+                }
+
+                // set Exif
+                $mime_type = $this->data['Nodeattachment']['mime_type'];
+                if (($mime_type == 'image/jpeg' || $mime_type == 'image/tiff')) {
+
                 }
         }
 
@@ -125,6 +132,25 @@ class Nodeattachment extends NodeattachmentAppModel {
                         while( fgets( $fh ) ) { }
                         pclose( $fh );
                 }
+        }
+
+        /**
+         * Get EXIF of file
+         *
+         * @param string $filename
+         * @return array
+         */
+        public function getExif($filename = null) {
+
+                if (is_null($filename)) {
+                        return false;
+                }
+
+                App::import('Vendor', 'Nodeattachment.exif-reader.php');
+                $er = new phpExifReader($filename);
+                $er->processFile();
+
+                return $er->getImageInfo();
         }
 
 

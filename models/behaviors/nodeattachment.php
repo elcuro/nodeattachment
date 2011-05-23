@@ -21,7 +21,9 @@ class NodeattachmentBehavior extends ModelBehavior {
                 $model->bindModel(array(
                     'hasMany' => array(
                         'Nodeattachment' => array(
-                            'order' => 'Nodeattachment.priority ASC'
+                            'order' => array(
+                                'Nodeattachment.priority ASC',
+                                /*'Nodeattachment.created ASC'*/)
                         ))
                 ));
 

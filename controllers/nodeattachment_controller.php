@@ -87,7 +87,7 @@ class NodeattachmentController extends NodeattachmentAppController {
                 $this->Nodeattachment->recursive = 0;
                 $attachments = $this->Nodeattachment->find('all', array(
                     'conditions' => array('node_id' => $node_id),
-                    'order' => array('priority ASC')
+                    'order' => array('priority ASC', 'created ASC')
                 ));
                 $this->set(compact('attachments'));
                 $this->disableCache();
@@ -132,6 +132,14 @@ class NodeattachmentController extends NodeattachmentAppController {
                                 $this->__getMime($this->uploads_path . DS . $filename['name'] . '.' . $filename['ext'])
 
                         );
+
+                        // get shot time of photo
+                        if ($data['mime_type'] == 'image/jpeg' || $data['mime_type'] == 'image/tiff') {
+                                $exif_data = $this->Nodeattachment->getExif($new_path);
+                                if (isset($exif_data['DateTime']))
+                                        $data['created'] = $exif_data['DateTime'];
+                        }
+
                         if (!$this->Nodeattachment->save($data)) {
                                 $result = array('error' => __('The Attachment could not be saved. Please, try again.', true));
                         }
