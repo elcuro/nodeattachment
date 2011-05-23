@@ -297,6 +297,28 @@ class NodeattachmentController extends NodeattachmentAppController {
                 }
                 $this->render(false);
         }
+        
+        /**
+         * Reset priority and set "created" from exif
+         *
+         * @return void
+         */
+        public function admin_resetPrioritySetCreated() {
+                
+                $res = $this->Nodeattachment->find('all');
+                foreach ($res as $data) {
+                        if ($data['Nodeattachment']['mime_type'] == 'image/jpeg' || $data['Nodeattachment']['mime_type'] == 'image/tiff') {
+                                $file_path = $this->uploads_path . DS . $data['Nodeattachment']['slug'];
+                                $exif = $this->Nodeattachment->getExif($file_path);
+                                $data['Nodeattachment']['created'] = $exif['DateTime'];
+
+                                $data['Nodeattachment']['priority'] = 1;
+
+                                debug($data);
+                        }
+                }
+                
+        }
 
         /**
          * Get mimetype of file
