@@ -37,6 +37,8 @@ FfmpegDir (optional): If you have installed ffmpeg on server, type full path to 
 If ffmpeg is not installed on server, type 'n/a'
 More info about ffmpeg: http://ffmpeg.org/
 
+Types (optional): Coma separated list of nodeattachment types. You can edit it in nodeattachment admin edit
+
 FfmpegExec (optional): Run ffmpeg via exec function (in background). This is perfect solution for convert big files in background, while php script continue as ordinary
 Be sure you have all neccessary permission to run ffmpeg with exec (safe_mode etc.)
 More info about exec http://php.net/manual/en/function.exec.php
