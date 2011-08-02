@@ -56,6 +56,10 @@ class NodeattachmentController extends NodeattachmentAppController {
                 $this->Security->validatePost = false;
 
                 $this->uploads_path = WWW_ROOT . $this->uploads_dir;
+
+                $cfg = Configure::read('Nodeattachment');
+                $types = explode(',', $cfg['types']);
+                $this->set(compact('types'));
         }
 
         /**

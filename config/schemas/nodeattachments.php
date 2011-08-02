@@ -20,6 +20,7 @@ class NodeattachmentsSchema extends CakeSchema {
             'slug' => array('type' => 'string', 'null' => false, 'lenth' => 250),
             'path' => array('type' => 'string', 'null' => false, 'default' => NULL),
             'mime_type' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 100),
+            'type' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 100),
             'title' => array('type' => 'string', 'null' => false, 'lenth' => 200),
             'description' => array('type' => 'text', 'null' => true),
             'licence' => array('type' => 'string', 'null' => true, 'lenth' => 200),

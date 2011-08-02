@@ -215,6 +215,18 @@ class NodeattachmentHelper extends AppHelper {
         }
 
         /**
+         * Extract type of attachment
+         *
+         * @param string $type
+         * @return array
+         */
+        public function filterType($type = 'Gallery') {
+
+                $nodeattachments = Set::extract('/Nodeattachment[type=/' . $type . '/]', $this->Layout->node);
+                return $nodeattachments;
+        }
+
+        /**
          * DEPRECATED!!!  use filterMime instead
          * Get attachments
          *

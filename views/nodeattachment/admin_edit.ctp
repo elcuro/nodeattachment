@@ -35,6 +35,7 @@
                         echo $form->input('id');
                         echo $form->input('title', array('label' => __('Title', true)));
                         echo $form->input('description', array('label' => __('Description', true)));
+                        echo $form->input('type', array('label' => __('Type', true)));
                         echo $form->input('author', array('label' => __('Author', true)));
                         echo $form->input('author_url', array('label' => __('Author Url', true)));
                         echo $form->input('status', array('label' => __('Status', true)));

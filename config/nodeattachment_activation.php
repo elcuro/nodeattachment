@@ -24,13 +24,20 @@ class NodeattachmentActivation {
         private $db;
 
         /**
+         * Plugin name
+         *
+         * @var string
+         */
+        public $pluginName = 'nodeattachment';
+
+        /**
          * Constructor
          *
          * @return vodi
          */
          public function  __construct() {
 
-                 $this->SchemaDir = APP.'plugins'.DS.'nodeattachment'.DS.'config'.DS.'schemas';
+                 $this->SchemaDir = APP.'plugins'.DS.$this->pluginName.DS.'config'.DS.'schemas';
                  $this->db =& ConnectionManager::getDataSource('default');
 
         }
@@ -56,15 +63,29 @@ class NodeattachmentActivation {
                         $schema_class_name = Inflector::camelize($schema_name).'Schema';
                         $table_name = $schema_name;
 
+                         include_once($this->SchemaDir.DS.$schema_file);
+                         $ActiveSchema = new $schema_class_name;
+
                         if (!in_array($table_name, $this->db->_sources)) {
-                                 include_once($this->SchemaDir.DS.$schema_file);
-                                 $ActiveSchema = new $schema_class_name;
+                                // create table
                                  if(!$this->db->execute($this->db->createSchema($ActiveSchema, $table_name))) {
                                          return false;
                                  }
-                        }
+                        } else {
+                                // add columns to existing table if neccessary
+                                $OldSchema = new CakeSchema(array('plugin' => $this->pluginName));
+                                $old_schema = $OldSchema->read();
 
+                                $alter = $ActiveSchema->compare($old_schema);
+                                unset($alter[$table_name]['drop'], $alter[$table_name]['change']);
+
+                                if (!$this->db->execute($this->db->alterSchema($alter))) {
+                                        return false;
+                                }
+                                
+                        }
                 }
+
 
                 return true;
 
@@ -90,6 +111,10 @@ class NodeattachmentActivation {
                 );
                 $controller->Setting->write('Nodeattachment.ffmpegDir', 'n/a', array(
                     'editable' => 1, 'description' => __('Directory with ffmpeg, type n/a if not installed', true))
+                );
+                $controller->Setting->write('Nodeattachment.types', __('For download, My gallery', true), array(
+                    'editable' => 1,
+                    'description' => __('Coma separated list of attachment types', true))
                 );
                 $controller->Setting->write('Nodeattachment.ffmpegExec', 0, array(
                     'editable' => 1,
