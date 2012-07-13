@@ -173,7 +173,7 @@ class NodeattachmentActivation {
                 $cake_schema_files = array();
                 if ($h = opendir($dir)) {
                         while (false !== ($file = readdir($h))) {
-                                if (($file != ".") && ($file != "..")) {
+                                if (($file != ".") && ($file != "..") && ($file != ".svn")) {
                                         $cake_schema_files[] = $file;
                                 }
                         }
