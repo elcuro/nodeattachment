@@ -30,7 +30,39 @@ class NodeattachmentBehavior extends ModelBehavior {
                 return $query;
 
         }
-
+        
+        /**
+         * After delete callback
+         *
+         * @param object $model
+         * @return void
+         */
+        public function afterDelete(&$model) {
+                
+                parent::afterDelete($model);
+                
+                $conf = Configure::read('Nodeattachment');
+                
+                // delete all attachments for node
+                foreach ($model->data['Nodeattachment'] as $attachment) {
+                        $model->Nodeattachment->delete($attachment['id']);
+                        
+                        $filename_expl = explode('.', $attachment['slug']);
+                        $files_to_delete = array(
+                                WWW_ROOT . $attachment['path'], // uploaded file
+                                $conf['flvDir'] . DS . $filename_expl[0] . '.flv', // flv variant
+                                $conf['thumbDir'] . DS . $filename_expl[0] . '.' . $conf['thumbExt'], // video thumb
+                        );
+                        foreach($files_to_delete as $file) {
+                                if (file_exists($file)) {
+                                        unlink($file);
+                                }
+                        }                        
+                        
+                }
+                
+                
+        }
 
 }
 ?>
