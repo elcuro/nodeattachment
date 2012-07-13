@@ -148,7 +148,7 @@ class NodeattachmentHelper extends AppHelper {
                         return;
                 }
 
-                // thumb name with orignial filename
+                // check if exists thumb with original filename
                 $thumb_filename = $file_name[0] . '.' . Configure::read('Nodeattachment.thumbnailExt');
                 if (file_exists($this->conf['thumbDir'] . DS . $thumb_filename)) {
                         $data['thumb_path'] = '/nodeattachment/img/tn/'. $thumb_filename;
@@ -157,7 +157,7 @@ class NodeattachmentHelper extends AppHelper {
                         return;
                 }
 
-                // thumb name with type filename
+                // check if exists thumb with mime type filename
                 $thumb_filename = 'thumb_' . $file_type[0] . '.' . Configure::read('Nodeattachment.thumbnailExt');
                 if (file_exists($this->conf['iconDir'] . DS . $thumb_filename)) {
                         $data['thumb_path'] = '/nodeattachment/img/' . $thumb_filename;
