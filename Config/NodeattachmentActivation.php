@@ -75,7 +75,7 @@ class NodeattachmentActivation {
                                  }
                         } else {
                                 // add columns to existing table if neccessary
-                                $OldSchema = new CakeSchema(array('plugin' => $this->pluginName));
+                                /*$OldSchema = new CakeSchema(array('plugin' => $this->pluginName));
                                 $old_schema = $OldSchema->read();
 
                                 $alter = $ActiveSchema->compare($old_schema);
@@ -83,7 +83,7 @@ class NodeattachmentActivation {
 
                                 if (!$this->db->execute($this->db->alterSchema($alter))) {
                                         return false;
-                                }
+                                }*/
                                 
                         }
                 }
