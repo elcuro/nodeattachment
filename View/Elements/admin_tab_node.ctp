@@ -91,6 +91,8 @@ if (!empty($upload_dir)) {
 
 </div>
 <?php
+        debug($this->Html->webroot);
+
         echo $this->Html->script(array(
             '/nodeattachment/js/valums-file-uploader/client/fileuploader.js'),
                 array('inline' => false));

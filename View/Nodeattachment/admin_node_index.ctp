@@ -7,7 +7,7 @@
                 $this->Nodeattachment->setNodeattachment($attachment);
                 $file_name = explode('.', $this->Nodeattachment->field('slug'));
 
-                $actions = $this->Ajax->link(__('Edit', true), array(
+                /*$actions = $this->Ajax->link(__('Edit', true), array(
                             'plugin' => 'nodeattachment',
                             'controller' => 'nodeattachment',
                             'action' => 'edit',
@@ -22,7 +22,7 @@
                             $attachment['Nodeattachment']['id'],
                             'token' => $this->params['_Token']['key']),
                                 array('update' => 'attachments-listing', 'indicator' => 'loading')
-                );
+                );*/
 
                 $thumbnail = $this->Image2->resize(
                         $this->Nodeattachment->field('thumb_path'),
@@ -42,7 +42,7 @@
                 $row .= $this->Html->tag('td', $thumbnail);
                 $row .= $this->Html->tag('td', '('.$file_name[1].')');
                 $row .= $this->Html->tag('td', $attachment['Nodeattachment']['title']);
-                $row .= $this->Html->tag('td', $actions);
+                //$row .= $this->Html->tag('td', $actions);
                 echo $this->Html->tag(
                         'tr',
                         $row,
@@ -61,7 +61,7 @@
         $options = array(
             "update" => "$.post('".$sort_url."', $('#sortable').sortable('serialize'))"
         );
-        echo $this->Ajax->sortable('sortable', $options);
+        //echo $this->Ajax->sortable('sortable', $options);
     ?>
 </div>
 
