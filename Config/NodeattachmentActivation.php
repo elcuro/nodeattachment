@@ -37,7 +37,7 @@ class NodeattachmentActivation {
          */
          public function  __construct() {
 
-                 $this->SchemaDir = APP.'plugins'.DS.$this->pluginName.DS.'Config'.DS.'Schema';
+                 $this->SchemaDir = APP.'Plugin'.DS.$this->pluginName.DS.'Config'.DS.'Schema';
                  $this->db =& ConnectionManager::getDataSource('default');
 
         }
@@ -50,8 +50,10 @@ class NodeattachmentActivation {
          */
         public function beforeActivation(&$controller) {
 
-                App::Import('CakeSchema');
+                App::uses('CakeSchema', 'Model');
                 $CakeSchema = new CakeSchema();
+                
+                $all_tables = $this->db->listSources();
 
                 // list schema files from config/schema dir
                 if (!$cake_schema_files = $this->_listSchemas($this->SchemaDir))
@@ -66,7 +68,7 @@ class NodeattachmentActivation {
                          include_once($this->SchemaDir.DS.$schema_file);
                          $ActiveSchema = new $schema_class_name;
 
-                        if (!in_array($table_name, $this->db->_sources)) {
+                        if (!in_array($table_name, $all_tables)) {
                                 // create table
                                  if(!$this->db->execute($this->db->createSchema($ActiveSchema, $table_name))) {
                                          return false;
