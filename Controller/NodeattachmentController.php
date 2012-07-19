@@ -71,7 +71,6 @@ class NodeattachmentController extends NodeattachmentAppController {
         public function admin_index($id) {
 
                 $this->set('title_for_layout', __('Attachments for node', true));
-
         }
 
         /**
