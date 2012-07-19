@@ -51,21 +51,22 @@ class Nodeattachment extends NodeattachmentAppModel {
          */
         public function afterDelete() {
 
-               $this->unlinkFiles();
+               $this->unlinkFiles($this->data);
         }
         
         /**
          * Delete physically all files from disk for nodeattachment
          *
+         * @param array $data e.g. $data['Nodeattachment']['slug']...
          * @return void
          */
-        private function __unlinkFiles() {
+        public function unlinkFiles($nodeattachment) {
                 
                 $conf = Configure::read('Nodeattachment');
-                $filename_expl = explode('.', $this->data['Nodeattachment']['slug']);
+                $filename_expl = explode('.', $nodeattachment['Nodeattachment']['slug']);
                 
                 $files_to_delete = array(
-                        WWW_ROOT . $this->uploads_dir . DS . $this->data['Nodeattachment']['slug'], // uploaded file
+                        WWW_ROOT . $this->uploads_dir . DS . $nodeattachment['Nodeattachment']['slug'], // uploaded file
                         $conf['flvDir'] . DS . $filename_expl[0] . '.flv', // flv variant
                         $conf['thumbDir'] . DS . $filename_expl[0] . '.' . $conf['thumbExt'], // video thumb
                 );                   
