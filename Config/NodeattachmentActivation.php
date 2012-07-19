@@ -28,7 +28,7 @@ class NodeattachmentActivation {
          *
          * @var string
          */
-        public $pluginName = 'nodeattachment';
+        public $pluginName = 'Nodeattachment';
 
         /**
          * Constructor
@@ -37,7 +37,7 @@ class NodeattachmentActivation {
          */
          public function  __construct() {
 
-                 $this->SchemaDir = APP.'plugins'.DS.$this->pluginName.DS.'config'.DS.'schemas';
+                 $this->SchemaDir = APP.'plugins'.DS.$this->pluginName.DS.'Config'.DS.'Schema';
                  $this->db =& ConnectionManager::getDataSource('default');
 
         }
@@ -100,7 +100,7 @@ class NodeattachmentActivation {
          */
         public function onActivation(&$controller) {
 
-                $controller->Setting->write('Nodeattachment.maxFileSize', '3', array(
+                $controller->Setting->write('Nodeattachment.maxFileSize', '5', array(
                     'editable' => 1, 'description' => __('Max. size of uploaded file (MB)', true))
                 );
                 $controller->Setting->write('Nodeattachment.allowedFileTypes', 'jpg,gif,png', array(

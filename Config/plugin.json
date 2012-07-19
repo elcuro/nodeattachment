@@ -1,0 +1,14 @@
+{
+	"name": "Nodeattachment",
+	"description": "Attachments for nodes",
+
+	"author": "Juraj Jancuska",
+	"authorEmail": "jjancuska@gmail.com",
+	"authorUrl": "",
+
+	"dependencies": {
+		"plugins": [
+			"Image2"
+		]
+	}
+}
