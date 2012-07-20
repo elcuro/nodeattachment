@@ -53,15 +53,18 @@
     </tbody>
     </table>
     <?php
-        $sort_url = $this->Html->url(array(
+        $sortUrl = $this->Html->url(array(
             'plugin' => 'nodeattachment',
             'controller' => 'nodeattachment',
             'action' => 'sort' 
         ));
         $options = array(
-            "update" => "$.post('".$sort_url."', $('#sortable').sortable('serialize'))"
+            "complete" => "$.post('".$sortUrl."', $('#sortable').sortable('serialize'))"
         );
-        //echo $this->Ajax->sortable('sortable', $options);
+        
+        $this->Js->get('#sortable');
+        $this->Js->sortable($options);
+        echo $this->Js->writeBuffer();
     ?>
 </div>
 
