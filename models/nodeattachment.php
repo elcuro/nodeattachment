@@ -51,7 +51,7 @@ class Nodeattachment extends NodeattachmentAppModel {
          */
         public function afterDelete() {
 
-               $this->unlinkFiles();
+               $this->__unlinkFiles();
         }
         
         /**
