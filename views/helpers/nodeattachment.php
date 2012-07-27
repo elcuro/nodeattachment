@@ -94,9 +94,11 @@ class NodeattachmentHelper extends AppHelper {
                 if (isset($nodeattachment[$model]['id'])) {
                         $data = $nodeattachment[$model];
                 }
-                $this->nodeattachment[$model] = $data;
-                $this->__thumb();
-                $this->__flv();
+                if (isset($data)) {
+                     $this->nodeattachment[$model] = $data;
+                     $this->__thumb();
+                     $this->__flv();
+                }
         }
 
         /**
