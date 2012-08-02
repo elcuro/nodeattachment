@@ -31,11 +31,10 @@ class NodeattachmentController extends NodeattachmentAppController {
         * @var array
         */
        public $helpers = array(
+           'Js' => array('Jquery'),
            'Text',
            'Image',
-           'Filemanager',
-           'Nodeattachment.Javascript',
-           'Nodeattachment.Ajax'
+           'Filemanager',   
        );
        
        /**
@@ -298,11 +297,10 @@ class NodeattachmentController extends NodeattachmentAppController {
         * @return array
         */
        public function admin_sort() {
-
               Configure::write('debug', 0);
               $this->disableCache();
 
-              $ids = $this->params['form']['nodeattachments'];
+              $ids = $this->request->data['nodeattachments'];
               foreach ($ids as $position => $id) {
                      $this->Nodeattachment->id = $id;
                      $position = $position + 3;
