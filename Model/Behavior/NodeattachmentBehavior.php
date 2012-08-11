@@ -32,25 +32,39 @@ class NodeattachmentBehavior extends ModelBehavior {
         }
         
         /**
-         * After delete callback
+         * Before delete callback
          *
          * @param object $model
          * @return void
          */
-        public function afterDelete(&$model) {
+        public function beforeDelete(&$model) {
                 
-                parent::afterDelete($model);
+                parent::beforeDelete($model);
                 
-                App::import('Model', 'Nodeattachment.Nodeattachment');
-                $Nodeattachment = new Nodeattachment;
+                $model->bindModel(array(
+                    'hasMany' => array(
+                        'Nodeattachment' => array(
+                            'order' => array(
+                                'Nodeattachment.priority ASC',
+                                'Nodeattachment.created ASC')
+                        ))
+                ));                
+                $data = $model->findById($model->id);
                 
-                // delete all attachments for node
-                foreach ($model->data['Nodeattachment'] as $attachment) {
-                       
-                       $Nodeattachment->read(null, $attachment['id']);
-                       $Nodeattachment->id = $attachment['id'];
-                       $Nodeattachment->delete();
-                }                               
+                if (isset($data['Nodeattachment'])) {
+                     App::import('Model', 'Nodeattachment.NodeattachmentModel');
+                     $Nodeattachment = new Nodeattachment;
+
+                     // delete all attachments for node
+                     foreach ($data['Nodeattachment'] as $attachment) {
+                            $Nodeattachment->read(null, $attachment['id']);
+                            if (!$Nodeattachment->delete($attachment['id'])) {
+                                   return FALSE;
+                            }
+                     } 
+                }
+                
+                return true;
         }
 
 }
