@@ -68,6 +68,7 @@ class NodeattachmentController extends NodeattachmentAppController {
 
               $cfg = Configure::read('Nodeattachment');
               $types = explode(',', $cfg['types']);
+              $types = array_combine($types, $types);
               $this->set(compact('types'));
        }
 

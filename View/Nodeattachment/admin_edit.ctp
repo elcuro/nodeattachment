@@ -46,7 +46,7 @@
                      echo $this->Form->input('id');
                      echo $this->Form->input('title', array('label' => __('Title', true)));
                      echo $this->Form->input('description', array('label' => __('Description', true)));
-                     echo $this->Form->input('type', array('label' => __('Type', true)));
+                     echo $this->Form->input('type', array('label' => __('Category', true)));
                      echo $this->Form->input('author', array('label' => __('Author', true)));
                      echo $this->Form->input('author_url', array('label' => __('Author Url', true)));
                      echo $this->Form->input('status', array('label' => __('Status', true)));
