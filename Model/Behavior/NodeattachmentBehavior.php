@@ -52,7 +52,7 @@ class NodeattachmentBehavior extends ModelBehavior {
                 $data = $model->findById($model->id);
                 
                 if (isset($data['Nodeattachment'])) {
-                     App::import('Model', 'Nodeattachment.NodeattachmentModel');
+                     App::import('Model', 'Nodeattachment.Nodeattachment');
                      $Nodeattachment = new Nodeattachment;
 
                      // delete all attachments for node
