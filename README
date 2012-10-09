@@ -4,8 +4,8 @@ Attach various types of files to node
 - AJAX multiple file upload
 - if is installed ffmpeg, create splash image and convert files to flv
 
-!!! Not compatible with previous version of this plugin (0.1)
-To view previous version switch tag to 0.1
+!!! This version is only for Croogo 1.4+
+For earlier croogo versions download tag 0.3
 
 
 Dependecies
