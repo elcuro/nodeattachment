@@ -15,17 +15,6 @@ class NodeattachmentController extends NodeattachmentAppController {
        public $name = 'Nodeattachment';
 
        /**
-        * Used models
-        *
-        * @var array
-        */
-       public $uses = array(
-           'Setting',
-           'Node',
-           'Nodeattachment.Nodeattachment'
-       );
-
-       /**
         * Used helpers
         *
         * @var array
