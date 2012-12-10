@@ -92,6 +92,9 @@ class NodeattachmentHelper extends AppHelper {
        public function nodeThumb($width, $height, $method = 'resizeRatio', $options = array()) {
 
               $attachment = Set::extract('/Nodeattachment/.[1]', $this->Layout->node);
+              if (empty($attachment)) {
+                return false;
+              }
               $this->setNodeattachment($attachment[0]);
               if (!empty($this->nodeattachment)) {
                      return $this->Image2->resize($this->field('thumb_path'), $width, $height, $method, $options, FALSE, $this->field('server_thumb_path'));
@@ -114,9 +117,14 @@ class NodeattachmentHelper extends AppHelper {
               if (isset($nodeattachment[$model]['id'])) {
                      $data = $nodeattachment[$model];
               }
-              $this->nodeattachment[$model] = $data;
-              $this->__thumb();
-              $this->__flv();
+              
+              if (isset($data)) {
+                     $this->nodeattachment[$model] = $data;
+                     $this->__thumb();
+                     $this->__flv();
+              } else {
+                     $this->nodeattachment = false;
+              }
        }
 
        /**
