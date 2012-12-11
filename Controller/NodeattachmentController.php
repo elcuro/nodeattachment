@@ -25,6 +25,16 @@ class NodeattachmentController extends NodeattachmentAppController {
            'Image',
            'Filemanager',   
        );
+
+       /**
+        * Used Models
+        *
+        * @var array
+        **/
+       public $uses = array(
+              'Nodeattachment.Nodeattachment',
+              'Node',
+              'Term');
        
        /**
         * Used components
@@ -463,6 +473,63 @@ class NodeattachmentController extends NodeattachmentAppController {
               }
               //debug($nodes);
               $this->set(compact('nodes'));
+       }
+
+       /**
+        * Filter all downloads by term and
+        * - vocabulary_id
+        * - nodeattachment category
+        * - term level (todo)
+        * - mime type (todo)
+        * 
+        *
+        * @return void
+        **/
+       public function downloadsByTerms() {
+              
+              if (!isset($this->request->named['vocabulary'])) {
+                     $this->Session->setFlash(__('Missing vocabulary id'));
+                     $this->redirect(array('controller' => 'nodes', 'action' => 'promoted', 'plugin' => false));                     
+              }
+              $vocabulary = $this->Term->Vocabulary->findById($this->request->named['vocabulary']);
+
+              $terms_tree = $this->Term->Taxonomy->getTree($vocabulary['Vocabulary']['alias'], array(
+                     'key' => 'id',
+                     'value' => 'title',
+                     'cache' => true
+              ));     
+
+              $node_condition = array();
+              $term_condition = array();
+              foreach ($terms_tree as $term_id  => $term_title) {
+                     $pos = strpos($term_title, '_');
+                     if (($pos === false) || ($pos > 4)) {
+                            $node_condition[] = array(
+                                   'Node.terms LIKE' => "%\"".$term_id."\"%"
+                            );
+                            $term_condition[] = array( 
+                                   'Term.id' => $term_id
+                            );
+                      }
+              }
+              $terms = $this->Term->find('all', array(
+                     'conditions' => array(
+                            'OR' => $term_condition,
+                     ),
+                     'order' => 'title ASC',
+                     'recursive' => -1)
+              );                
+              $nodes = $this->Node->find('all', array(
+                     'conditions' => array(
+                            'OR' => $node_condition
+                     ),
+                     'order' => 'title ASC',
+                     'cache' => array(
+                            'name' => 'nodes_downloads_by_term_' . $vocabulary['Vocabulary']['id'],
+                            'config' => 'nodes_term',
+                     ))
+              );
+              $this->set(compact('terms', 'terms_tree', 'nodes'));      
        }
 
 }
