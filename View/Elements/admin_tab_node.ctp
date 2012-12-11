@@ -19,7 +19,7 @@ if (!empty($upload_dir)) {
         <!-- or put a simple form for upload here -->
     </noscript>
 </div>
-
+<?php $this->Form->unlockField('file'); ?>
 
 
 <div id="loading" style="display:none;">
