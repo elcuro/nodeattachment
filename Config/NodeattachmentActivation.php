@@ -124,6 +124,8 @@ class NodeattachmentActivation {
                     'input_type' => 'checkbox')
                 );
 
+                $controller->Croogo->addAco('Nodeattachment');
+                $controller->Croogo->addAco('Nodeattachment/downloadsByTerms', array('registered', 'public')); 
         }
 
         /**
