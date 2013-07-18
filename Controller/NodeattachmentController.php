@@ -170,7 +170,6 @@ class NodeattachmentController extends NodeattachmentAppController {
         */
        public function admin_addStorageFile() {
 
-              App::import('Core', 'File');
               $this->layout = 'ajax';
               $notice = array();
 
@@ -249,14 +248,12 @@ class NodeattachmentController extends NodeattachmentAppController {
         * @param string $fileName
         * @return array
         */
-       private function __uniqeSlugableFilename($fileName = null) {
+       private function __uniqeSlugableFilename($file = null) {
 
-              $file = pathinfo($fileName);
-              while (file_exists($this->uploads_path . DS . $file['filename'] . '.' . $file['extension'])) {
-                     $file['filename'] .= rand(10, 99);
+              while (file_exists($this->uploads_path . DS . $file['name'] . '.' . $file['ext'])) {
+                     $file['name'] .= rand(10, 99);
               }              
-              $fileName = $file['filename'].'.'.$file['extension'];
-              return $fileName;
+              return $file;
        }
 
        /**
