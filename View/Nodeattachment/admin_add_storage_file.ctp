@@ -1,6 +1,6 @@
 <?php
-echo $html->css('admin');
-echo $html->script('jquery/jquery.min');
+echo $this->Html->css('admin');
+echo $this->Html->script('jquery/jquery.min');
 ?>
 <script type="text/javascript">
     $(document).ready(function() {
