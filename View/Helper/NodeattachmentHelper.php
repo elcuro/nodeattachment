@@ -191,7 +191,7 @@ class NodeattachmentHelper extends AppHelper {
                      return;
               } else {
                      $data['thumb_path'] = '/nodeattachment/img/thumb_default.' . $this->conf['thumbExt'];
-                     $data['server_thumb_path'] = $data['thumb_path'] . DS .
+                     $data['server_thumb_path'] = $this->conf['iconDir'] . DS .
                              'thumb_default.' . $this->conf['thumbExt'];
                      $this->nodeattachment['Nodeattachment'] = $data;
                      return;

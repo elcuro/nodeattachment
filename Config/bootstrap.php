@@ -1,11 +1,11 @@
 <?php
         $tmp_conf = Configure::read('Nodeattachment');
         $conf = array(
-            'thumbDir' => APP . 'plugins' . DS . 'nodeattachment' . DS .
+            'thumbDir' => APP . 'Plugin' . DS . 'Nodeattachment' . DS .
                 'webroot' . DS . 'img' . DS . 'tn',
-            'iconDir' => APP . 'plugins' . DS . 'nodeattachment' . DS .
+            'iconDir' => APP . 'Plugin' . DS . 'Nodeattachment' . DS .
                 'webroot' . DS . 'img',
-            'flvDir' => APP . 'plugins' . DS . 'nodeattachment' . DS .
+            'flvDir' => APP . 'Plugin' . DS . 'Nodeattachment' . DS .
                 'webroot' . DS .'flv',
             'thumbExt' => 'png'
         );
