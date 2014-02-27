@@ -1,0 +1,8 @@
+{
+    "name": "elcuro/nodeattachment",
+    "type": "croogo-plugin",
+    "require": {
+        "composer/installers": "~1.0",
+        "elcuro/image2": "1.4"
+    }
+}
