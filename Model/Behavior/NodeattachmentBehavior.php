@@ -16,7 +16,7 @@ class NodeattachmentBehavior extends ModelBehavior {
  * @param array $query
  * @return array $query
  */
-    public function beforeFind(&$model, $query) {
+    public function beforeFind(Model $model, $query) {
         
         $model->bindModel(array(
             'hasMany' => array(
@@ -24,7 +24,8 @@ class NodeattachmentBehavior extends ModelBehavior {
                 	'className' => 'Nodeattachment.Nodeattachment',
                     'order' => array(
                         'Nodeattachment.priority ASC',
-                        'Nodeattachment.created DESC')
+                        'Nodeattachment.created DESC'
+                    ),
                 ))
         ));
 

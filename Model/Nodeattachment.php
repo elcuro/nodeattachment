@@ -10,28 +10,6 @@ App::uses('NodeattachmentAppModel', 'Nodeattachment.Model');
 class Nodeattachment extends NodeattachmentAppModel {
 
 /**
- * belongsTo associations
- *
- * @var array
- */
-	public $belongsTo = array(
-		'Node' => array(
-			'className' => 'Nodes.Node',
-			'foreignKey' => 'node_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		),
-		'User' => array(
-			'className' => 'Users.User',
-			'foreignKey' => 'user_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
-	);
-
-/**
  * Before save callback
  *
  * @param array $options
