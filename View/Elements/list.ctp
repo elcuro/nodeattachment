@@ -23,8 +23,10 @@
 
 
 	$items = array();
-	foreach ($this->Nodes->node['Nodeattachment'] as $key => $data) {
-		if ($data['type'] == $config['ofType']) {
+	$i = 1;
+	foreach ($this->Nodes->node['Nodeattachment'] as $key => $data) {		
+		if (($data['type'] == $config['ofType']) && ($i <= $config['limit'])) {
+			++$i;
 			$items[] = $data;
 			unset($this->Nodes->node['Nodeattachment'][$key]);
 		}
