@@ -14,8 +14,6 @@ class NodeattachmentTest extends CakeTestCase {
  */
 	public $fixtures = array(
 		'plugin.nodeattachment.nodeattachment',
-		'plugin.nodeattachment.node',
-		'plugin.nodeattachment.user'
 	);
 
 /**

@@ -1,0 +1,4 @@
+<?php
+	Router::parseExtensions()
+
+?>
