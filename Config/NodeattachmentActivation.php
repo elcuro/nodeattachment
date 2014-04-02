@@ -2,13 +2,6 @@
 /**
  * Nodeattachment Activation
  *
- * Activation class for Example plugin.
- * This is optional, and is required only if you want to perform tasks when your plugin is activated/deactivated.
- *
- * @package  Croogo
- * @author   Fahad Ibnay Heylaal <contact@fahad19.com>
- * @license  http://www.opensource.org/licenses/mit-license.php The MIT License
- * @link     http://www.croogo.org
  */
 class NodeattachmentActivation {
 
@@ -30,6 +23,10 @@ class NodeattachmentActivation {
  * @return void
  */
 	public function onActivation(&$controller) {
+
+		App::uses('CroogoPlugin', 'Extensions.Lib');
+		$CroogoPlugin = new CroogoPlugin();
+		$CroogoPlugin->migrate('Nodeattachment');		
 
 		$controller->Croogo->addAco('Nodeattachment/Nodeattachments/admin_upload');
 		$controller->Croogo->addAco('Nodeattachment/Nodeattachments/admin_remote');
