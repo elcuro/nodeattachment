@@ -35,6 +35,27 @@ class NodeattachmentTest extends CakeTestCase {
 		unset($this->Nodeattachment);
 
 		parent::tearDown();
+		ob_flush();
 	}
+
+/**
+ * Test get mime of file
+ *
+ * @return void
+ **/
+	public function testGetMimeImage() {
+
+		$path = App::pluginPath('Nodeattachment'). 'Test' . DS . 'uploads' . DS . 'image.jpg';
+		$res = $this->Nodeattachment->getMime($path);
+		$this->assertEquals('image/jpeg', $res);
+	}
+
+	public function testGetMimeApplication() {
+
+		$path = App::pluginPath('Nodeattachment'). 'Test' . DS . 'uploads' . DS . 'pdfapp.pdf';
+		$res = $this->Nodeattachment->getMime($path);
+		$this->assertEquals('application/pdf', $res);
+	}
+
 
 }
