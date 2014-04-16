@@ -46,7 +46,7 @@ class NodeattachmentHelper extends AppHelper {
         *
         * @return void
         */
-       public function beforeRender() {
+       public function beforeRender($viewFile) {
 
               $this->conf = Configure::read('Nodeattachment');
        }

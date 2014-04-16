@@ -16,7 +16,7 @@ class NodeattachmentBehavior extends ModelBehavior {
          * @param array $query
          * @return array $query
          */
-        public function beforeFind(&$model, $query) {
+        public function beforeFind(Model $model, $query) {
 
                 $model->bindModel(array(
                     'hasMany' => array(
@@ -37,9 +37,9 @@ class NodeattachmentBehavior extends ModelBehavior {
          * @param object $model
          * @return void
          */
-        public function beforeDelete(&$model) {
+        public function beforeDelete(Model $model, $cascade = true) {
                 
-                parent::beforeDelete($model);
+                parent::beforeDelete($model, $cascade);
                 
                 $model->bindModel(array(
                     'hasMany' => array(
