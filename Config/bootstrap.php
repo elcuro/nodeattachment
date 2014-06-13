@@ -7,18 +7,14 @@
 	
 	Croogo::hookAdminTab('Nodes/admin_edit', 'Attachments', 'Nodeattachment.admin_tab_node');
 
-	CroogoNav::add('extensions.children.nodeattachment', array(
+	CroogoNav::add('settings.children.nodeattachment', array(
 		'title' => 'Nodeattachment',
-		'url' => '#',
-		'children' => array(
-			'example1' => array(
-				'title' => 'Settings',
-				'url' => array(
-					'plugin' => 'settings', 
-					'controller' => 'settings', 
-					'action' => 'prefix', 
-					'Nodeattachment')
-			),
+		'url' => array(
+			'admin' => true,
+			'plugin' => 'settings',
+			'controller' => 'settings',
+			'action' => 'prefix',
+			'Nodeattachment',
 		),
-	));	
+	));		
 ?>
