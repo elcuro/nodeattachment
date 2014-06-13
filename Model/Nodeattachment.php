@@ -20,7 +20,7 @@ class Nodeattachment extends NodeattachmentAppModel {
 		if (isset($this->data['Nodeattachment']['filename']) &&
 			!isset($this->data['Nodeattachment']['mime'])) {
 			
-            $file = Configure::read('Nodeattachment.uploadServerPath') .
+            $file = Configure::read('Nodeattachment.uploadsServerPath') .
 				$this->data['Nodeattachment']['filename'];
 			$this->data['Nodeattachment']['mime'] = $this->getMime($file);
 
@@ -128,7 +128,7 @@ class Nodeattachment extends NodeattachmentAppModel {
 			'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
 		);
 
-		$ext = pathinfo($file, PATHINFO_EXTENSION);
+		$ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 		if (array_key_exists($ext, $mime_types)) {
 			return $mime_types[$ext];
 		} elseif (function_exists('finfo_open')) {
