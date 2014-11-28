@@ -17,6 +17,8 @@
 	);
 
 	$node = $this->request->data;
+
+	$this->Form->unlockField('file');
  ?>
 
 <div id="nodeattachment-container" data-node-id="<?php echo $node['Node']['id'];?>">
